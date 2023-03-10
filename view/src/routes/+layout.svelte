@@ -2,7 +2,7 @@
   import "../app.postcss";
   import { page } from "$app/stores";
   import { DarkMode, Drawer, Sidebar, SidebarGroup, SidebarItem, SidebarWrapper } from "flowbite-svelte";
-  import { Home, ChartBar, Cog, QuestionMarkCircle } from "svelte-heros-v2";
+  import { Home, ChartBar, Cog, QuestionMarkCircle, Folder } from "svelte-heros-v2";
 
   $: activeUrl = $page.url.pathname;
   let activateClickOutside = false;
@@ -23,6 +23,11 @@
         <SidebarItem label="Home" href="/" active={activeUrl === `/`}>
           <svelte:fragment slot="icon">
             <Home />
+          </svelte:fragment>
+        </SidebarItem>
+        <SidebarItem label="Projects" href="/">
+          <svelte:fragment slot="icon">
+            <Folder />
           </svelte:fragment>
         </SidebarItem>
         <SidebarItem label="Dashboard" href="/">
