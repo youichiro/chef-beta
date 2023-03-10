@@ -1,4 +1,4 @@
-import { error } from '@sveltejs/kit';
+import { error } from "@sveltejs/kit";
 
 /** @type {import('./$types').PageLoad} */
 export const load = async ({ params, fetch }) => {
@@ -10,6 +10,6 @@ export const load = async ({ params, fetch }) => {
     const response = await fetch(`/tasks/${params.taskId}/api`);
     return await response.json();
   } catch (error) {
-    console.log(`Error is load function for : ${error}`)
+    console.log(`Error is load function for : ${error}`);
   }
-}
+};

@@ -5,8 +5,8 @@ export const GET = async () => {
   const taskId: number = 1; // TODO: URLから取得する
   const task = await fetchTask(datasetId, taskId);
   const labels = await fetchLabels(datasetId);
-  return json({ datasetId, task, labels })
-}
+  return json({ datasetId, task, labels });
+};
 
 const fetchTask = async (datasetId: number, taskId: number) => {
   const task = {
@@ -16,10 +16,10 @@ const fetchTask = async (datasetId: number, taskId: number) => {
     content: {
       sm: "テキスト テキスト",
       lg: "テキスト テキスト テキスト テキスト テキスト テキスト テキスト テキスト テキスト テキスト テキスト テキスト",
-    }
+    },
   };
-  return task
-}
+  return task;
+};
 
 const fetchLabels = async (datasetId: number) => {
   const labels = [
@@ -39,4 +39,4 @@ const fetchLabels = async (datasetId: number) => {
     },
   ];
   return labels;
-}
+};

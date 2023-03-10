@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Card } from "flowbite-svelte";
-	import type { PageData } from "./$types";
+  import type { PageData } from "./$types";
 
   export let data: PageData;
   const annotations = [
@@ -17,8 +17,8 @@
       datasetLabelId: data.datasetId,
       startOffset: 1,
       endOffset: 3,
-    }
-  ]
+    },
+  ];
 </script>
 
 <div class="mt-5 mx-5">

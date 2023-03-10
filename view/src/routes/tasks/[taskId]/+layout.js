@@ -1,4 +1,4 @@
-import { error } from '@sveltejs/kit';
+import { error } from "@sveltejs/kit";
 
 /** @type {import('./$types').PageLoad} */
 export const load = async ({ params }) => {
@@ -7,4 +7,4 @@ export const load = async ({ params }) => {
   }
 
   throw error(404, "Not Found");
-}
+};
