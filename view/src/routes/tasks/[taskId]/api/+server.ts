@@ -1,8 +1,8 @@
 import { json } from "@sveltejs/kit";
 
 export const GET = async () => {
-  const datasetId: number = 1; // TODO: URLから取得する
-  const taskId: number = 1; // TODO: URLから取得する
+  const datasetId = 1; // TODO: URLから取得する
+  const taskId = 1; // TODO: URLから取得する
   const task = await fetchTask(datasetId, taskId);
   const labels = await fetchLabels(datasetId);
   return json({ datasetId, task, labels });
