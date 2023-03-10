@@ -2,7 +2,7 @@
   import "../app.postcss";
   import { page } from "$app/stores";
   import { DarkMode, Drawer, Sidebar, SidebarGroup, SidebarItem, SidebarWrapper } from "flowbite-svelte";
-  import { Home, ChartBar, Cog } from "svelte-heros-v2";
+  import { Home, ChartBar, Cog, QuestionMarkCircle } from "svelte-heros-v2";
 
   $: activeUrl = $page.url.pathname;
   let activateClickOutside = false;
@@ -36,6 +36,13 @@
           </svelte:fragment>
         </SidebarItem>
         <DarkMode />
+      </SidebarGroup>
+      <SidebarGroup border>
+        <SidebarItem label="Help" href="/">
+          <svelte:fragment slot="icon">
+            <QuestionMarkCircle />
+          </svelte:fragment>
+        </SidebarItem>
       </SidebarGroup>
     </SidebarWrapper>
   </Sidebar>
