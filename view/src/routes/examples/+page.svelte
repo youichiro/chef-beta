@@ -1,5 +1,6 @@
 <script lang="ts">
   import PageTop from "$lib/components/PageTop.svelte";
+  import Table from "$lib/components/Table.svelte";
   import { Spinner } from "flowbite-svelte";
 
   // https://jsonplaceholder.typicode.com
@@ -8,15 +9,13 @@
 
 <PageTop title="Example" page_path="examples/" />
 
-<div class="p-4">
+<div class="p-2">
   {#await getTodos}
     <div class="text-center">
       <Spinner />
     </div>
   {:then todos}
-    {#each todos as todo}
-      <p>{todo.title}</p>
-    {/each}
+    <Table rows={todos} key="id" />
   {:catch error}
     <p>error! {error}</p>
   {/await}
