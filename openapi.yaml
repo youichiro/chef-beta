@@ -47,5 +47,30 @@ paths:
                       title: todo2
       operationId: get-todos
       description: GET /todos
+  /hello:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                x-examples:
+                  Example 1:
+                    message: hello
+                properties:
+                  message:
+                    type: string
+                required:
+                  - message
+              examples:
+                Example 1:
+                  value:
+                    message: hello
+      operationId: get-hello
+      description: GET /hello
 components:
   schemas: {}
