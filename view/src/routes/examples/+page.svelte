@@ -9,13 +9,13 @@
 
 <PageTop title="Example" page_path="examples/" />
 
-<div class="p-2">
+<div>
   {#await getTodos}
     <div class="text-center">
       <Spinner />
     </div>
   {:then todos}
-    <Table rows={todos} key="id" />
+    <Table rows={todos.slice(0, 10)} key="id" />
   {:catch error}
     <p>error! {error}</p>
   {/await}

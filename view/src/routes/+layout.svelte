@@ -1,7 +1,7 @@
 <script lang="ts">
   import "../app.postcss";
   import { page } from "$app/stores";
-  import { DarkMode, Drawer, Sidebar, SidebarGroup, SidebarItem, SidebarWrapper } from "flowbite-svelte";
+  import { Drawer, Sidebar, SidebarGroup, SidebarItem, SidebarWrapper } from "flowbite-svelte";
   import { Home, ChartBar, Cog, QuestionMarkCircle, Folder, Cloud } from "svelte-heros-v2";
 
   $: activeUrl = $page.url.pathname;
@@ -13,7 +13,7 @@
   hidden={false}
   bind:activateClickOutside
   width="w-64"
-  class="overflow-scroll pb-32"
+  class="overflow-scroll pb-32 border"
   id="sidebar"
 >
   <Sidebar asideClass="w-54">
@@ -45,7 +45,7 @@
             <Cog />
           </svelte:fragment>
         </SidebarItem>
-        <DarkMode />
+        <!-- <DarkMode /> -->
       </SidebarGroup>
       <SidebarGroup border>
         <SidebarItem label="Help" href="/">
@@ -58,7 +58,7 @@
   </Sidebar>
 </Drawer>
 
-<div class="flex mx-auto w-full">
+<div class="flex mx-auto w-full dark:bg-gray-800">
   <main class="ml-64 w-full mx-auto">
     <slot />
   </main>
