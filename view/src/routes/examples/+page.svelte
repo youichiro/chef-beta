@@ -5,8 +5,7 @@
   import { Spinner } from "flowbite-svelte";
   import Pagination from '$lib/components/Pagination.svelte';
 
-  // https://jsonplaceholder.typicode.com
-  let getTodos = fetch('https://jsonplaceholder.typicode.com/todos')
+  let getTodos = fetch('http://localhost:4010/todos')
     .then(response => response.json())
 
   const TodosSchema = z.object({
