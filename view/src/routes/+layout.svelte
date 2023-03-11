@@ -2,7 +2,7 @@
   import "../app.postcss";
   import { page } from "$app/stores";
   import { DarkMode, Drawer, Sidebar, SidebarGroup, SidebarItem, SidebarWrapper } from "flowbite-svelte";
-  import { Home, ChartBar, Cog, QuestionMarkCircle, Folder } from "svelte-heros-v2";
+  import { Home, ChartBar, Cog, QuestionMarkCircle, Folder, Cloud } from "svelte-heros-v2";
 
   $: activeUrl = $page.url.pathname;
   let activateClickOutside = false;
@@ -20,6 +20,11 @@
     <SidebarWrapper divClass="overflow-y-auto py-4 px-3 rounded dark:bg-gray-800">
       <SidebarGroup>
         <SidebarItem label="LOGO" />
+        <SidebarItem label="Example" href="/examples" active={activeUrl === `/examples`}>
+          <svelte:fragment slot="icon">
+            <Cloud />
+          </svelte:fragment>
+        </SidebarItem>
         <SidebarItem label="Home" href="/" active={activeUrl === `/`}>
           <svelte:fragment slot="icon">
             <Home />
@@ -53,7 +58,7 @@
   </Sidebar>
 </Drawer>
 
-<div class="flex px-4 mx-auto w-full">
+<div class="flex mx-auto w-full">
   <main class="ml-64 w-full mx-auto">
     <slot />
   </main>
