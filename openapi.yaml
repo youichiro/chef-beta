@@ -1,0 +1,51 @@
+openapi: 3.1.0
+x-stoplight:
+  id: u6lcda3q8x2t5
+info:
+  title: Chef OpenAPI
+  version: '1.0'
+  description: Chef OpenAPI
+  contact:
+    name: youichiro
+    email: cinnamon416@gmail.com
+servers:
+  - url: 'http://localhost:4010'
+paths:
+  /todos:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                x-examples:
+                  Example 1:
+                    - id: 1
+                      title: todo1
+                    - id: 2
+                      title: todo2
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    title:
+                      type: string
+                  required:
+                    - id
+                    - title
+              examples:
+                Example 1:
+                  value:
+                    - id: 1
+                      title: todo1
+                    - id: 2
+                      title: todo2
+      operationId: get-todos
+      description: GET /todos
+components:
+  schemas: {}
