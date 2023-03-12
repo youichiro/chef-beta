@@ -1,13 +1,10 @@
-## Developing
-
-```bash
+## Setup
+```sh
 npm ci
 npm run dev
 ```
 
-## Building
-
-```bash
-npm run build
-npm run preview
+## Mock API server
+```sh
+make mock-api
 ```
