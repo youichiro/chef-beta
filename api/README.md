@@ -1,5 +1,5 @@
 # chef-api
-## setup
+## Setup
 load environment variables
 ```sh
 brew install direnv
@@ -19,19 +19,40 @@ make setup_development_db
 make setup_test_db
 ```
 
-
-## migration
+run fastapi server
 ```sh
+poetry run uvicorn app.main:app --reload
+```
+
+
+## Migration
+```sh
+# go to alembic.ini directory
 cd db
 
-# generate a migraiton version according to app/models.py
-poetry run alembic revision --autogenerate -m "<message>"
+# generate a new migraiton version according to model definitions
+poetry run alembic revision --autogenerate -m "<version comment>"
 
 # migrate to database
 poetry run alembic upgrade head
 
+# show history
+poetry run alembic history
+
 cd ..
 
-# also reflesh test database
+# reflesh test database
 make setup_test_db
+```
+
+## Dependency management
+```sh
+# add to main group
+poerty add xxx
+
+# add to dev group
+poetry add --group dev xxx
+
+# add to test group
+poerty add --group test xxx
 ```
