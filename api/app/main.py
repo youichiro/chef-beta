@@ -1,11 +1,11 @@
-from fastapi import FastAPI, APIRouter, Depends
+from fastapi import APIRouter, Depends, FastAPI
 from sqlalchemy.orm import Session
 
-from app.dependencies import get_db
 from app import models
-
+from app.dependencies import get_db
 
 app = FastAPI()
+
 
 @app.get("/")
 def get_root():
@@ -13,6 +13,7 @@ def get_root():
 
 
 api_router = APIRouter(prefix="/api")
+
 
 @api_router.get("/projects")
 def get_projects(db: Session = Depends(get_db)):
