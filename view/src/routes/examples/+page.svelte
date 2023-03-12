@@ -5,7 +5,7 @@
   import { Spinner } from "flowbite-svelte";
   import Pagination from '$lib/components/Pagination.svelte';
 
-  let getTodos = fetch('http://localhost:4010/todos', {headers: {'Prefer': 'example=at_first'}})
+  let getTodos = fetch('http://localhost:3000/todos')
     .then(response => response.json())
 
   const ResponseSchema = z.object({
