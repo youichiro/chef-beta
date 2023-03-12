@@ -6,3 +6,14 @@ setup_test_db:
 
 run_fastapi:
 	poetry run uvicorn app.main:app --reload
+
+lint:
+	poetry run isort .
+	poetry run black .
+	poetry run pflake8 .
+	poetry run mypy .
+
+clear_cache_files:
+	find . | grep -E __pycache__ | xargs rm -rf
+	find . | grep -E .pytest_cache | xargs rm -rf
+	find . | grep -E .mypy_cache | xargs rm -rf
