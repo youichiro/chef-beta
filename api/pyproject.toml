@@ -1,9 +1,43 @@
 [tool.poetry]
-name = "api"
+name = "chef-api"
 version = "0.1.0"
 description = ""
 authors = ["youichiro <cinnamon416@gmail.com>"]
 readme = "README.md"
+
+
+[tool.flake8]
+max-line-length = 140
+max-complexity = 10
+extend-ignore = ["E203"]
+exclude = "db/,.venv/"
+
+
+[tool.black]
+line-length = 140
+exclude = '''
+(
+    db
+    | .mypy_cache
+    | .pytest_cache
+    | .venv
+)
+'''
+
+
+[tool.isort]
+profile = "black"
+line_length = 140
+skip = ["db", ".venv"]
+
+
+[tool.mypy]
+python_version = "3.11"
+ignore_missing_imports = true
+check_untyped_defs = true
+warn_unused_configs = true
+exclude = "db/*"
+
 
 [tool.poetry.dependencies]
 python = "^3.10"
