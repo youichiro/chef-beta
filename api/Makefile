@@ -3,3 +3,6 @@ setup_development_db:
 
 setup_test_db:
 	sh db/test/import_schema.sh
+
+run_fastapi:
+	poetry run uvicorn app.main:app --reload

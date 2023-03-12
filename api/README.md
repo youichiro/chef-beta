@@ -21,7 +21,7 @@ make setup_test_db
 
 run fastapi server
 ```sh
-poetry run uvicorn app.main:app --reload
+make run_fastapi
 ```
 
 
