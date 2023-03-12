@@ -1,3 +1,5 @@
+import os
+import sys
 from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config
@@ -18,12 +20,23 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = None
+sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
+from app.models import Base
+target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
+db_user = os.environ["MYSQL_USER"]
+db_password = os.environ["MYSQL_PASSWORD"]
+db_host = os.environ["MYSQL_HOST"]
+db_port = os.environ["MYSQL_PORT"]
+db_name = os.environ["MYSQL_DATABASE"]
+sqlalchemy_database_url = f"mysql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
+
+db_url_escaped = sqlalchemy_database_url.replace("%", "%%")
+config.set_main_option("sqlalchemy.url", db_url_escaped)
 
 
 def run_migrations_offline() -> None:
