@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 from fastapi_pagination import Page, add_pagination
@@ -8,6 +9,14 @@ from app import models, schemas
 from app.dependencies import get_db
 
 app = FastAPI()
+allow_origins = ["http://localhost:5173"]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=allow_origins,
+    allow_credentials=False, # cookieをサポートするか
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/")

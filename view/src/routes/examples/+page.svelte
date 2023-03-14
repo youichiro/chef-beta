@@ -5,31 +5,30 @@
   import { Spinner } from "flowbite-svelte";
   import Pagination from '$lib/components/Pagination.svelte';
 
-  let getTodos = fetch('http://localhost:3000/todos')
+  let getProjects = fetch('http://localhost:8000/api/projects')
     .then(response => response.json())
 
   const ResponseSchema = z.object({
-    data: z.object({
+    items: z.object({
       id: z.number(),
-      title: z.string(),
+      name: z.string(),
     }).array(),
     total: z.number(),
-    isFirst: z.boolean(),
-    isLast: z.boolean(),
-    prevOffset: z.nullable(z.number()),
-    nextOffset: z.nullable(z.number()),
+    page: z.number(),
+    size: z.number(),
+    pages: z.number(),
   })
 </script>
 
 <PageTop title="Example" page_path="examples/" />
 
 <div>
-  {#await getTodos}
+  {#await getProjects}
     <div class="text-center">
       <Spinner />
     </div>
   {:then response}
-    <Table rows={ResponseSchema.parse(response).data} key="id" />
+    <Table rows={ResponseSchema.parse(response).items} key="id" />
     <Pagination />
   {:catch error}
     <p>error! {error}</p>
