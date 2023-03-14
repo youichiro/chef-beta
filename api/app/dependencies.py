@@ -1,7 +1,10 @@
+from typing import Iterator
+
 from app.database import SessionLocal
+from sqlalchemy.orm import Session
 
 
-def get_db():
+def get_db() -> Iterator[Session]:
     db = SessionLocal()
     try:
         yield db
