@@ -4,9 +4,18 @@
   import Table from "$lib/components/Table.svelte";
   import { Spinner } from "flowbite-svelte";
   import Pagination from '$lib/components/Pagination.svelte';
+  import type { PageData } from './$types';
 
-  let getProjects = fetch('http://localhost:8000/api/projects')
-    .then(response => response.json())
+  export let data: PageData;
+
+  const getProjects = async () => {
+    const response = await self.fetch(`http://localhost:8000/api/projects?page=${data.page}&size=3`);
+    if (response.ok) {
+      return response.json();
+    } else {
+      throw new Error(`status: ${response.status}, ${response.statusText}`);
+    }
+  }
 
   const ResponseSchema = z.object({
     items: z.object({
@@ -18,18 +27,24 @@
     size: z.number(),
     pages: z.number(),
   })
+
+  let promise = getProjects();
 </script>
 
 <PageTop title="Example" page_path="examples/" />
 
 <div>
-  {#await getProjects}
+  {#await promise}
     <div class="text-center">
       <Spinner />
     </div>
   {:then response}
-    <Table rows={ResponseSchema.parse(response).items} key="id" />
-    <Pagination />
+    {#if response.items.length === 0}
+      <p>items empty.</p>
+    {:else}
+      <Table rows={ResponseSchema.parse(response).items} key="id" />
+      <Pagination currentPage={data.page} lastPage={ResponseSchema.parse(response).pages} />
+    {/if}
   {:catch error}
     <p>error! {error}</p>
   {/await}
