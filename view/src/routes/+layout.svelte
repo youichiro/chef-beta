@@ -6,44 +6,55 @@
 
   $: activeUrl = $page.url.pathname;
   let activateClickOutside = false;
+
+  const styles = {
+    sidebarItem: {
+      base: "flex item-center p-4 text-gray-500 hover:bg-gray-100 hover:text-gray-700",
+      active: "flex item-center p-4 bg-green-100 text-green-500 hover:text-gray-700"
+    },
+    hoge: {
+      aClass: "bg-red",
+      activeClass: "bg-blue"
+    }
+  }
 </script>
 
 <Drawer
+  id="sidebar"
   backdrop={false}
   hidden={false}
   bind:activateClickOutside
+  divClass="verflow-y-auto z-50 bg-white"
   width="w-64"
-  class="overflow-scroll pb-32 border"
-  id="sidebar"
+  class="overflow-scroll border"
 >
-  <Sidebar asideClass="w-54">
-    <SidebarWrapper divClass="overflow-y-auto py-4 px-3 rounded dark:bg-gray-800">
-      <SidebarGroup>
+  <Sidebar>
+    <SidebarWrapper divClass="overflow-y-auto py-4">
+      <SidebarGroup ulClass="">
         <SidebarItem label="LOGO" />
-        <SidebarItem label="Home" href="/" active={activeUrl === "/"}>
+        <SidebarItem label="Home" href="/" active={activeUrl === "/"} aClass={styles.sidebarItem.base} activeClass={styles.sidebarItem.active}>
           <svelte:fragment slot="icon">
             <Home />
           </svelte:fragment>
         </SidebarItem>
-        <SidebarItem label="Projects" href="/projects" active={activeUrl.startsWith("/projects")}>
+        <SidebarItem label="Projects" href="/projects" active={activeUrl.startsWith("/projects")} aClass={styles.sidebarItem.base} activeClass={styles.sidebarItem.active}>
           <svelte:fragment slot="icon">
             <Folder />
           </svelte:fragment>
         </SidebarItem>
-        <SidebarItem label="Dashboard" href="/">
+        <SidebarItem label="Dashboard" href="/" aClass={styles.sidebarItem.base} activeClass={styles.sidebarItem.active}>
           <svelte:fragment slot="icon">
             <ChartBar />
           </svelte:fragment>
         </SidebarItem>
-        <SidebarItem label="Setting" href="/">
+        <SidebarItem label="Setting" href="/" aClass={styles.sidebarItem.base} activeClass={styles.sidebarItem.active}>
           <svelte:fragment slot="icon">
             <Cog />
           </svelte:fragment>
         </SidebarItem>
-        <!-- <DarkMode /> -->
       </SidebarGroup>
-      <SidebarGroup border>
-        <SidebarItem label="Help" href="/">
+      <SidebarGroup border ulClass="">
+        <SidebarItem label="Help" href="/" aClass={styles.sidebarItem.base}>
           <svelte:fragment slot="icon">
             <QuestionMarkCircle />
           </svelte:fragment>
