@@ -26,6 +26,14 @@
   const handleClickLast = () => {
     window.location.href = `/examples?page=${lastPage}`
   };
+
+  const styles = {
+    paginationButton: {
+      base: 'border-none text-gray-500 bg-white hover:bg-gray-100 hover:text-gray-700',
+      prev: `border-none text-gray-500 bg-white ${previousPage ? 'hover:bg-gray-100 hover:text-gray-700' : 'cursor-not-allowed'}`,
+      next: `border-none text-gray-500 bg-white ${nextPage ? 'hover:bg-gray-100 hover:text-gray-700' : 'cursor-not-allowed'}`,
+    }
+  }
 </script>
 
 <div class="flex items-center justify-end">
@@ -33,16 +41,16 @@
     <span>{helper.start} - {helper.end} of {helper.total}</span>
   </div>
   <div class="flex">
-    <PaginationItem on:click={handleClickFirst}>
+    <PaginationItem on:click={handleClickFirst} normalClass={styles.paginationButton.base}>
       <ChevronDoubleLeft />
     </PaginationItem>
-    <PaginationItem on:click={handleClickPrevious}>
+    <PaginationItem on:click={handleClickPrevious} normalClass={styles.paginationButton.prev}>
       <ChevronLeft />
     </PaginationItem>
-    <PaginationItem on:click={handleClickNext}>
+    <PaginationItem on:click={handleClickNext} normalClass={styles.paginationButton.next}>
       <ChevronRight />
     </PaginationItem>
-    <PaginationItem on:click={handleClickLast}>
+    <PaginationItem on:click={handleClickLast} normalClass={styles.paginationButton.base}>
       <ChevronDoubleRight />
     </PaginationItem>
   </div>
