@@ -20,17 +20,12 @@
     <SidebarWrapper divClass="overflow-y-auto py-4 px-3 rounded dark:bg-gray-800">
       <SidebarGroup>
         <SidebarItem label="LOGO" />
-        <SidebarItem label="Example" href="/examples" active={activeUrl === `/examples`}>
-          <svelte:fragment slot="icon">
-            <Cloud />
-          </svelte:fragment>
-        </SidebarItem>
-        <SidebarItem label="Home" href="/" active={activeUrl === `/`}>
+        <SidebarItem label="Home" href="/" active={activeUrl === "/"}>
           <svelte:fragment slot="icon">
             <Home />
           </svelte:fragment>
         </SidebarItem>
-        <SidebarItem label="Projects" href="/">
+        <SidebarItem label="Projects" href="/projects" active={activeUrl.startsWith('/projects')}>
           <svelte:fragment slot="icon">
             <Folder />
           </svelte:fragment>

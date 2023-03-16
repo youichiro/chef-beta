@@ -10,20 +10,20 @@
   const nextPage = currentPage + 1 <= lastPage ? currentPage + 1 : null
 
   const handleClickFirst = () => {
-    window.location.href = `/examples?page=${firstPage}`
+    window.location.href = `/projects?page=${firstPage}`
   };
   const handleClickPrevious = () => {
     if (previousPage !== null) {
-      window.location.href = `/examples?page=${previousPage}`
+      window.location.href = `/projects?page=${previousPage}`
     }
   };
   const handleClickNext = () => {
     if (nextPage !== null) {
-      window.location.href = `/examples?page=${nextPage}`
+      window.location.href = `/projects?page=${nextPage}`
     }
   };
   const handleClickLast = () => {
-    window.location.href = `/examples?page=${lastPage}`
+    window.location.href = `/projects?page=${lastPage}`
   };
 
   const styles = {

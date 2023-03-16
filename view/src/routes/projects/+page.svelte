@@ -31,11 +31,11 @@
   let promise = getProjects();
 </script>
 
-<PageTop title="Example" page_path="examples/" />
+<PageTop title="Projects" pagePath="projects/" />
 
 <div>
   {#await promise}
-    <div class="text-center">
+    <div class="text-center mt-8">
       <Spinner />
     </div>
   {:then response}
