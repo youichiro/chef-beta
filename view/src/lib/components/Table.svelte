@@ -1,8 +1,8 @@
 <script lang="ts">
   import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from "flowbite-svelte";
-  export let key: string
-  export let rows: any[]
-  const columns = Object.keys(rows[0])
+  export let key: string;
+  export let rows: any[];
+  const columns = Object.keys(rows[0]);
 </script>
 
 <div class="m-4 border rounded">

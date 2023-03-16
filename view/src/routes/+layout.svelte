@@ -25,7 +25,7 @@
             <Home />
           </svelte:fragment>
         </SidebarItem>
-        <SidebarItem label="Projects" href="/projects" active={activeUrl.startsWith('/projects')}>
+        <SidebarItem label="Projects" href="/projects" active={activeUrl.startsWith("/projects")}>
           <svelte:fragment slot="icon">
             <Folder />
           </svelte:fragment>

@@ -2,38 +2,40 @@
   import { PaginationItem, ChevronLeft, ChevronRight } from "flowbite-svelte";
   import { ChevronDoubleLeft, ChevronDoubleRight } from "svelte-heros-v2";
 
-  export let currentPage: number
-  export let lastPage: number
+  export let currentPage: number;
+  export let lastPage: number;
 
-  const firstPage = 1
-  const previousPage = currentPage - 1 >= 1 ? currentPage - 1 : null
-  const nextPage = currentPage + 1 <= lastPage ? currentPage + 1 : null
+  const firstPage = 1;
+  const previousPage = currentPage - 1 >= 1 ? currentPage - 1 : null;
+  const nextPage = currentPage + 1 <= lastPage ? currentPage + 1 : null;
 
   const handleClickFirst = () => {
-    window.location.href = `/projects?page=${firstPage}`
+    window.location.href = `/projects?page=${firstPage}`;
   };
   const handleClickPrevious = () => {
     if (previousPage !== null) {
-      window.location.href = `/projects?page=${previousPage}`
+      window.location.href = `/projects?page=${previousPage}`;
     }
   };
   const handleClickNext = () => {
     if (nextPage !== null) {
-      window.location.href = `/projects?page=${nextPage}`
+      window.location.href = `/projects?page=${nextPage}`;
     }
   };
   const handleClickLast = () => {
-    window.location.href = `/projects?page=${lastPage}`
+    window.location.href = `/projects?page=${lastPage}`;
   };
 
   const styles = {
     paginationButton: {
-      base: 'border-none text-gray-500 bg-white hover:bg-gray-100',
-      prev: `border-none bg-white ${previousPage ? 'text-gray-500 hover:bg-gray-100' : 'text-gray-300 cursor-not-allowed'}`,
-      next: `border-none bg-white ${nextPage ? 'text-gray-500 hover:bg-gray-100' : 'text-gray-300 cursor-not-allowed'}`,
+      base: "border-none text-gray-500 bg-white hover:bg-gray-100",
+      prev: `border-none bg-white ${
+        previousPage ? "text-gray-500 hover:bg-gray-100" : "text-gray-300 cursor-not-allowed"
+      }`,
+      next: `border-none bg-white ${nextPage ? "text-gray-500 hover:bg-gray-100" : "text-gray-300 cursor-not-allowed"}`,
     },
-    paginationButtonIcon: 'outline-none',
-  }
+    paginationButtonIcon: "outline-none",
+  };
 </script>
 
 <div class="flex items-center justify-end">
