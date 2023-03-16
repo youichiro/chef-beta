@@ -5,20 +5,21 @@
   const columns = Object.keys(rows[0])
 </script>
 
-<Table hoverable={true}>
-  <TableHead>
-    {#each columns as column}
-      <TableHeadCell>{column}</TableHeadCell>
-    {/each}
-  </TableHead>
-  <TableBody>
-    {#each rows as row (row[key])}
-      <TableBodyRow>
-        {#each Object.values(row) as value}
-          <TableBodyCell>{value}</TableBodyCell>
-        {/each}
-      </TableBodyRow>
-    {/each}
-  </TableBody>
-</Table>
-
+<div class="m-4 border rounded">
+  <Table hoverable={true}>
+    <TableHead>
+      {#each columns as column}
+        <TableHeadCell>{column}</TableHeadCell>
+      {/each}
+    </TableHead>
+    <TableBody>
+      {#each rows as row (row[key])}
+        <TableBodyRow>
+          {#each Object.values(row) as value}
+            <TableBodyCell>{value}</TableBodyCell>
+          {/each}
+        </TableBodyRow>
+      {/each}
+    </TableBody>
+  </Table>
+</div>
