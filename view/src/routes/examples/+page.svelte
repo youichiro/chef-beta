@@ -42,7 +42,9 @@
     {#if response.items.length === 0}
       <p>items empty.</p>
     {:else}
-      <Table rows={ResponseSchema.parse(response).items} key="id" />
+      <div class="m-4 border rounded">
+        <Table rows={ResponseSchema.parse(response).items} key="id" />
+      </div>
       <Pagination currentPage={data.page} lastPage={ResponseSchema.parse(response).pages} />
     {/if}
   {:catch error}

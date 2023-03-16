@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, PaginationItem, ChevronLeft, ChevronRight } from "flowbite-svelte";
+  import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from "flowbite-svelte";
   export let key: string
   export let rows: any[]
   const columns = Object.keys(rows[0])
