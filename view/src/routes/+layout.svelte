@@ -10,7 +10,7 @@
   const styles = {
     sidebarItem: {
       base: "flex item-center p-4 text-gray-500 hover:bg-gray-100 hover:text-gray-700",
-      active: "flex item-center p-4 bg-green-100 text-green-500 hover:text-gray-700"
+      active: "flex item-center py-4 px-3 text-black border-l-4 border-orange-500"
     },
     hoge: {
       aClass: "bg-red",
