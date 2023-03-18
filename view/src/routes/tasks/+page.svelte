@@ -6,5 +6,5 @@
     const text = '私は小川耀一朗です';
 </script>
 
-<PageTop title="Annotation" pagePath="projects/1/datasets/1/tasks/1" />
+<PageTop title="Annotation" pages={["projects", "datasets", "tasks"]} />
 <Annotation {categories} {text} />

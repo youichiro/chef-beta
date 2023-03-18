@@ -33,7 +33,7 @@
   let promise = getProjects();
 </script>
 
-<PageTop title="Projects" pagePath="projects/" />
+<PageTop title="Projects" />
 
 <div>
   {#await promise}
