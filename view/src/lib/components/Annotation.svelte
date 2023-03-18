@@ -1,11 +1,12 @@
 <script lang="ts">
   import { Button } from "flowbite-svelte";
 
-  type SelectItem = {
+  type Category = {
       value: string;
       name: string;
+      color: string;
   }
-  export let categories: SelectItem[];
+  export let categories: Category[];
   export let text: string;
 
   type Annotation = {
@@ -13,6 +14,7 @@
     end: number;
     text: string;
     category: string;
+    color: string;
   };
 
   let selectedText = '';
@@ -40,15 +42,13 @@
     }
   }
 
-  const handleClickCategory = (category: string) => {
-    if (category === "") {
-      return
-    }
+  const handleClickCategory = (category: Category) => {
     const newAnnotation: Annotation = {
       start: selectedStart,
       end: selectedEnd,
       text: selectedText,
-      category,
+      category: category.name,
+      color: category.color,
     };
     annotations = [...annotations, newAnnotation];
     showCategory = false;
@@ -73,7 +73,7 @@
         <div>
           {#each Array(text.length) as _, charIndex (charIndex)}
             {#if annotation.start <= charIndex && charIndex < annotation.end}
-              <div class="inline-block border-t-2 border-sky-500 relative">
+              <div class={`inline-block border-t-2 border-${annotation.color} relative`}>
                 <span class="text-white select-none">{text[charIndex]}</span>
                 {#if charIndex === annotation.start}
                   <div class="inline-block absolute top-0 left-0 bg-white z-10">
@@ -92,7 +92,7 @@
   {#if showCategory}
     <div class="fixed bg-white my-2 z-20 border rounded shadow flex flex-col" style={modalStyle}>
       {#each categories as category}
-        <Button color="alternative" size="sm" btnClass={styles.selectBtn} on:click={() => handleClickCategory(category.name)}>{category.name}</Button>
+        <Button color="alternative" size="sm" btnClass={styles.selectBtn} on:click={() => handleClickCategory(category)}>{category.name}</Button>
       {/each}
     </div>
   {/if}

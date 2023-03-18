@@ -2,14 +2,15 @@
     import Annotation from "$lib/components/Annotation.svelte";
     import PageTop from "$lib/components/PageTop.svelte";
 
-    type SelectItem = {
+    type Category = {
         value: string;
         name: string;
+        color: string;
     }
-    const categories: SelectItem[] = [
-        { value: "名前", name: "名前" },
-        { value: "住所", name: "住所" },
-        { value: "電話番号", name: "電話番号" },
+    const categories: Category[] = [
+        { value: "名前", name: "名前", color: "yellow-500" },
+        { value: "住所", name: "住所", color: "sky-500" },
+        { value: "電話番号", name: "電話番号", color: "orange-500" },
     ]
     const text = '私は小川耀一朗です';
 </script>
