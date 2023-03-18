@@ -1,21 +1,20 @@
 <script lang="ts">
-  type Category = '名前' | '住所' | '電話番号';
+  export let categories: string[];
+  export let text: string;
+
   type Annotation = {
     start: number;
     end: number;
     text: string;
-    category: Category;
+    category: string;
   };
 
-  let text = '私は小川耀一朗です';
   let selectedText = '';
   let selectedStart = 0;
   let selectedEnd = 0;
-  let selectedCategory: Category | null;
+  let selectedCategory: string | null;
   let showCategory = false;
   let annotations: Annotation[] = [];
-
-  const categories: Category[] = ['名前', '住所', '電話番号'];
 
   const handleMouseUp = () => {
     const selection = document.getSelection();
@@ -54,8 +53,7 @@
   }
 </style>
 
-<div class="flex flex-col items-center">
-  <h1 class="text-2xl mb-4">テキストアノテーション</h1>
+<div>
   <div class="text-area" on:mouseup={handleMouseUp}>
     <p class="select-text">{text}</p>
     {#if annotations.length > 0}
@@ -79,13 +77,6 @@
       {/each}
     {/if}
   </div>
-  {#if selectedText}
-    <div class="mt-4">
-      選択されたテキスト: <strong>{selectedText}</strong><br>
-      開始位置: {selectedStart}<br>
-      終了位置: {selectedEnd}
-    </div>
-  {/if}
   {#if showCategory}
     <div class="mt-4">
       <label for="category">カテゴリ:</label>
@@ -96,16 +87,6 @@
         {/each}
       </select>
       <button on:click={addAnnotation} disabled={!selectedCategory}>アノテーションを追加</button>
-    </div>
-  {/if}
-  {#if annotations.length > 0}
-    <div class="mt-4">
-      <h2 class="text-xl mb-2">アノテーション:</h2>
-      <ul>
-        {#each annotations as annotation}
-          <li>{annotation.text} - {annotation.category}</li>
-        {/each}
-      </ul>
     </div>
   {/if}
 </div>
