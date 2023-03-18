@@ -48,7 +48,7 @@
   }
 </script>
 
-<style>
+<style lang="postcss">
   .text-area {
     @apply bg-white p-4 border rounded w-full min-h-[200px];
   }
