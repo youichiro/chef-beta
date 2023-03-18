@@ -1,5 +1,11 @@
 <script lang="ts">
-  export let categories: string[];
+  import { Select } from "flowbite-svelte";
+
+  type SelectItem = {
+      value: string;
+      name: string;
+  }
+  export let categories: SelectItem[];
   export let text: string;
 
   type Annotation = {
@@ -12,7 +18,7 @@
   let selectedText = '';
   let selectedStart = 0;
   let selectedEnd = 0;
-  let selectedCategory: string | null;
+  let selectedCategory: string = "";
   let annotations: Annotation[] = [];
   let showCategory = false;
   let modalStyle = '';
@@ -36,7 +42,7 @@
   }
 
   const addAnnotation = () => {
-    if (selectedCategory === null) {
+    if (selectedCategory === "") {
       return
     }
     const newAnnotation: Annotation = {
@@ -46,7 +52,7 @@
       category: selectedCategory,
     };
     annotations = [...annotations, newAnnotation];
-    selectedCategory = null;
+    selectedCategory = "";
     showCategory = false;
   }
 </script>
@@ -82,15 +88,8 @@
     {/if}
   </div>
   {#if showCategory}
-    <div class="fixed bg-white p-4 shadow-lg rounded z-20" style={modalStyle}>
-      <label for="category">カテゴリ:</label>
-      <select id="category" bind:value={selectedCategory}>
-        <option value="">選択してください</option>
-        {#each categories as cat}
-          <option value={cat}>{cat}</option>
-        {/each}
-      </select>
-      <button on:click={addAnnotation} disabled={!selectedCategory}>アノテーションを追加</button>
+    <div class="fixed bg-white my-2 z-20" style={modalStyle}>
+      <Select items={categories} bind:value={selectedCategory} placeholder="Choose category" on:change={addAnnotation} />
     </div>
   {/if}
 </div>
