@@ -73,7 +73,7 @@
         <div>
           {#each Array(text.length) as _, charIndex (charIndex)}
             {#if annotation.start <= charIndex && charIndex < annotation.end}
-              <div class={`inline-block border-t-2 border-${annotation.color} relative`}>
+              <div class='inline-block border-t-2 relative' style:border-color={annotation.color}>
                 <span class="text-white select-none">{text[charIndex]}</span>
                 {#if charIndex === annotation.start}
                   <div class="inline-block absolute top-0 left-0 bg-white z-10">
