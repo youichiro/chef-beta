@@ -13,8 +13,9 @@
   let selectedStart = 0;
   let selectedEnd = 0;
   let selectedCategory: string | null;
-  let showCategory = false;
   let annotations: Annotation[] = [];
+  let showCategory = false;
+  let modalStyle = '';
 
   const handleMouseUp = () => {
     const selection = document.getSelection();
@@ -24,6 +25,9 @@
       selectedStart = range.startOffset;
       selectedEnd = range.endOffset;
       showCategory = true;
+      // カテゴリ選択モーダルの表示位置を取得
+      const rect = range.getBoundingClientRect();
+      modalStyle = `top: ${rect.bottom}px; left: ${rect.left}px;`;
     } else {
       selectedText = '';
       selectedStart = selectedEnd = 0;
@@ -53,7 +57,7 @@
   }
 </style>
 
-<div>
+<div class="m-4">
   <div class="text-area" on:mouseup={handleMouseUp}>
     <p class="select-text">{text}</p>
     {#if annotations.length > 0}
@@ -78,7 +82,7 @@
     {/if}
   </div>
   {#if showCategory}
-    <div class="mt-4">
+    <div class="fixed bg-white p-4 shadow-lg rounded z-20" style={modalStyle}>
       <label for="category">カテゴリ:</label>
       <select id="category" bind:value={selectedCategory}>
         <option value="">選択してください</option>
