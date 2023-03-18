@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Select } from "flowbite-svelte";
+  import { Button } from "flowbite-svelte";
 
   type SelectItem = {
       value: string;
@@ -18,7 +18,6 @@
   let selectedText = '';
   let selectedStart = 0;
   let selectedEnd = 0;
-  let selectedCategory: string = "";
   let annotations: Annotation[] = [];
   let showCategory = false;
   let modalStyle = '';
@@ -41,19 +40,22 @@
     }
   }
 
-  const addAnnotation = () => {
-    if (selectedCategory === "") {
+  const handleClickCategory = (category: string) => {
+    if (category === "") {
       return
     }
     const newAnnotation: Annotation = {
       start: selectedStart,
       end: selectedEnd,
       text: selectedText,
-      category: selectedCategory,
+      category,
     };
     annotations = [...annotations, newAnnotation];
-    selectedCategory = "";
     showCategory = false;
+  }
+
+  const styles = {
+    selectBtn: "border-none py-2 px-4 w-full hover:bg-slate-100 text-left"
   }
 </script>
 
@@ -88,8 +90,10 @@
     {/if}
   </div>
   {#if showCategory}
-    <div class="fixed bg-white my-2 z-20" style={modalStyle}>
-      <Select items={categories} bind:value={selectedCategory} placeholder="Choose category" on:change={addAnnotation} />
+    <div class="fixed bg-white my-2 z-20 border rounded shadow flex flex-col" style={modalStyle}>
+      {#each categories as category}
+        <Button color="alternative" size="sm" btnClass={styles.selectBtn} on:click={() => handleClickCategory(category.name)}>{category.name}</Button>
+      {/each}
     </div>
   {/if}
 </div>
