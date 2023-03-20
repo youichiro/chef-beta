@@ -59,14 +59,8 @@
   }
 </script>
 
-<style lang="postcss">
-  .text-area {
-    @apply bg-white p-4 border rounded w-full min-h-[200px];
-  }
-</style>
-
 <div class="m-4">
-  <div class="text-area" on:mouseup={handleMouseUp}>
+  <div class="bg-white p-4 border rounded w-full min-h-[200px]" on:mouseup={handleMouseUp}>
     <p class="select-text">{text}</p>
     {#if annotations.length > 0}
       {#each annotations as annotation, i (i)}
