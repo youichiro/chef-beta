@@ -56,6 +56,10 @@
     showCategory = false;
   }
 
+  const annotationBorderStyle = (annotation: Annotation) => {
+    return `top: ${annotation.rect?.bottom}px; left: ${annotation.rect?.left}px; width: ${annotation.rect?.width}px; border-color: ${annotation.color};`
+  }
+
   const styles = {
     selectBtn: "border-none py-2 px-4 w-full hover:bg-slate-100 text-left"
   }
@@ -63,10 +67,10 @@
 
 <div class="m-4">
   <div class="bg-white p-4 border rounded w-full min-h-[200px] min-w-[600px]" on:mouseup={handleMouseUp}>
-    <p class="">{text}</p>
+    <p>{text}</p>
     {#if annotations.length > 0}
       {#each annotations as annotation, i (i)}
-        <div class="fixed border-b-2" style={`top: ${annotation.rect?.bottom}px; left: ${annotation.rect?.left}px; width: ${annotation.rect?.width}px; border-color: ${annotation.color};`}>
+        <div class="fixed border-b-2" style={annotationBorderStyle(annotation)}>
           <span class="fixed">{annotation.category}</span>
         </div>
       {/each}
