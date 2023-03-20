@@ -5,7 +5,7 @@
   export let title: string;
 </script>
 
-<div class="w-full bg-slate-100 px-4 py-4">
+<div class="w-full bg-slate-50 px-4 py-4">
   {#if pages.length > 0}
     <Breadcrumb>
       <BreadcrumbItem home href="/"></BreadcrumbItem>
