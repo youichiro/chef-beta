@@ -24,7 +24,7 @@
   let selectedRect: DOMRect | null = null;
   let annotations: Annotation[] = [];
   let showCategory = false;
-  $: modalStyle = buildModalStyle(selectedRect);
+  $: modalStyle = selectedRect ? `top: ${selectedRect.bottom}px; left: ${selectedRect.left}px;` : "";
 
   const handleMouseUp = () => {
     const selection = document.getSelection();
@@ -33,8 +33,8 @@
       const range = selection.getRangeAt(0);
       selectedStart = range.startOffset;
       selectedEnd = range.endOffset;
-      showCategory = true;
       selectedRect = range.getBoundingClientRect();
+      showCategory = true;
     } else {
       selectedText = '';
       selectedStart = selectedEnd = 0;
@@ -56,13 +56,6 @@
     showCategory = false;
   }
 
-  const buildModalStyle = (rect: DOMRect | null) => {
-    if (rect == null) {
-      return ""
-    }
-    return `top: ${rect.bottom}px; left: ${rect.left}px;`
-  }
-
   const styles = {
     selectBtn: "border-none py-2 px-4 w-full hover:bg-slate-100 text-left"
   }
@@ -73,21 +66,8 @@
     <p class="">{text}</p>
     {#if annotations.length > 0}
       {#each annotations as annotation, i (i)}
-        <div>
-          {#each Array(text.length) as _, charIndex (charIndex)}
-            {#if annotation.start <= charIndex && charIndex < annotation.end}
-              <div class='inline-block border-t-2 relative' style:border-color={annotation.color}>
-                <span class="text-white select-none">{text[charIndex]}</span>
-                {#if charIndex === annotation.start}
-                  <div class="inline-block absolute top-0 left-0 bg-white z-10">
-                    <span class="whitespace-nowrap select-none">{annotation.category}</span>
-                  </div>
-                {/if}
-              </div>
-            {:else}
-              <span class="invisible">{text[charIndex]}</span>
-            {/if}
-          {/each}
+        <div class="fixed border-b-2" style={`top: ${annotation.rect?.bottom}px; left: ${annotation.rect?.left}px; width: ${annotation.rect?.width}px; border-color: ${annotation.color};`}>
+          <span class="fixed">{annotation.category}</span>
         </div>
       {/each}
     {/if}
