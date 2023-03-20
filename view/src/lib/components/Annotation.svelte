@@ -15,14 +15,16 @@
     text: string;
     category: string;
     color: string;
+    rect: DOMRect | null;
   };
 
   let selectedText = '';
   let selectedStart = 0;
   let selectedEnd = 0;
+  let selectedRect: DOMRect | null = null;
   let annotations: Annotation[] = [];
   let showCategory = false;
-  let modalStyle = '';
+  $: modalStyle = buildModalStyle(selectedRect);
 
   const handleMouseUp = () => {
     const selection = document.getSelection();
@@ -32,12 +34,11 @@
       selectedStart = range.startOffset;
       selectedEnd = range.endOffset;
       showCategory = true;
-      // カテゴリ選択モーダルの表示位置を取得
-      const rect = range.getBoundingClientRect();
-      modalStyle = `top: ${rect.bottom}px; left: ${rect.left}px;`;
+      selectedRect = range.getBoundingClientRect();
     } else {
       selectedText = '';
       selectedStart = selectedEnd = 0;
+      selectedRect = null;
       showCategory = false;
     }
   }
@@ -49,9 +50,17 @@
       text: selectedText,
       category: category.name,
       color: category.color,
+      rect: selectedRect,
     };
     annotations = [...annotations, newAnnotation];
     showCategory = false;
+  }
+
+  const buildModalStyle = (rect: DOMRect | null) => {
+    if (rect == null) {
+      return ""
+    }
+    return `top: ${rect.bottom}px; left: ${rect.left}px;`
   }
 
   const styles = {
@@ -60,8 +69,8 @@
 </script>
 
 <div class="m-4">
-  <div class="bg-white p-4 border rounded w-full min-h-[200px]" on:mouseup={handleMouseUp}>
-    <p class="select-text">{text}</p>
+  <div class="bg-white p-4 border rounded w-full min-h-[200px] min-w-[600px]" on:mouseup={handleMouseUp}>
+    <p class="">{text}</p>
     {#if annotations.length > 0}
       {#each annotations as annotation, i (i)}
         <div>
