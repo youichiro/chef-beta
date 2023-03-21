@@ -1,22 +1,9 @@
 <script lang="ts">
-  import { Button } from "flowbite-svelte";
+  import type  { Category, Annotation } from "$lib/types";
+  import CategorySelectMenu from "./CategorySelectMenu.svelte";
 
-  type Category = {
-      value: string;
-      name: string;
-      color: string;
-  }
   export let categories: Category[];
   export let text: string;
-
-  type Annotation = {
-    start: number;
-    end: number;
-    text: string;
-    category: string;
-    color: string;
-    rect: DOMRect | null;
-  };
 
   let selectedText = '';
   let selectedStart = 0;
@@ -24,7 +11,6 @@
   let selectedRect: DOMRect | null = null;
   let annotations: Annotation[] = [];
   let showCategory = false;
-  $: modalStyle = selectedRect ? `top: ${selectedRect.bottom}px; left: ${selectedRect.left}px;` : "";
 
   const handleMouseUp = () => {
     const selection = document.getSelection();
@@ -43,7 +29,8 @@
     }
   }
 
-  const handleClickCategory = (category: Category) => {
+  const onClickCategorySelectMenu = (event: CustomEvent) => {
+    const category = event.detail.category;
     const newAnnotation: Annotation = {
       start: selectedStart,
       end: selectedEnd,
@@ -59,10 +46,6 @@
   const annotationBorderStyle = (annotation: Annotation) => {
     return `top: ${annotation.rect?.bottom}px; left: ${annotation.rect?.left}px; width: ${annotation.rect?.width}px; border-color: ${annotation.color};`
   }
-
-  const styles = {
-    selectBtn: "border-none py-2 px-4 w-full hover:bg-slate-100 text-left"
-  }
 </script>
 
 <div class="m-4">
@@ -77,10 +60,23 @@
     {/if}
   </div>
   {#if showCategory}
-    <div class="fixed bg-white my-2 z-20 border rounded shadow flex flex-col" style={modalStyle}>
-      {#each categories as category}
-        <Button color="alternative" size="sm" btnClass={styles.selectBtn} on:click={() => handleClickCategory(category)}>{category.name}</Button>
-      {/each}
-    </div>
+    <CategorySelectMenu categories={categories} rect={selectedRect} on:click={onClickCategorySelectMenu} />
   {/if}
 </div>
+
+
+<!--
+アノテーションを表示するための別のSvelteコンポーネントを作成する
+アノテーションを表示するためのコンポーネント（例：AnnotationDisplay.svelte）を作成し、それを使用してアノテーションを表示することで、コードをより読みやすくできます。
+
+関数の名前をより具体的にする
+関数名をもう少し具体的にして、それぞれの関数がどのような目的で使用されているかを明確にすると良いでしょう。例えば、handleMouseUp を handleTextSelection に変更し、handleClickCategory を addAnnotation に変更するなどです。
+
+コード内のマジックナンバーを避ける
+マジックナンバー（この場合は min-h-[200px] や min-w-[600px] など）を定数として定義し、それを使用することでコードの保守性を向上させることができます。定数を変更するだけで、全体のスタイルが変更できるようになります。
+
+コメントを追加してコードの説明を充実させる
+各関数や変数の目的を説明するコメントを追加することで、他の開発者がコードを理解しやすくなります。
+
+stylesにcssを書く
+-->

@@ -1,12 +1,8 @@
 <script lang="ts">
     import Annotation from "$lib/components/Annotation.svelte";
     import PageTop from "$lib/components/PageTop.svelte";
+    import type { Category } from "$lib/types";
 
-    type Category = {
-        value: string;
-        name: string;
-        color: string;
-    }
     const categories: Category[] = [
         { value: "名前", name: "名前", color: "yellow" },
         { value: "住所", name: "住所", color: "#98fb98" },
