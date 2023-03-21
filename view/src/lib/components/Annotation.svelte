@@ -59,9 +59,7 @@
       {/each}
     {/if}
   </div>
-  {#if showCategory}
-    <CategorySelectMenu categories={categories} rect={selectedRect} on:click={onClickCategorySelectMenu} />
-  {/if}
+  <CategorySelectMenu show={showCategory} categories={categories} rect={selectedRect} on:click={onClickCategorySelectMenu} />
 </div>
 
 
