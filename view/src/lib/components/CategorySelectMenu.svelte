@@ -10,7 +10,7 @@
 
   const dispatch = createEventDispatcher();
   const selectCategory = (category: Category) => {
-    dispatch('click', { category });
+    dispatch('select', { category });
   }
 
   const styles = {
