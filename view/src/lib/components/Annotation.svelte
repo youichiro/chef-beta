@@ -27,7 +27,7 @@
   }
 
   const handleMouseUp = () => {
-    const selection = document.getSelection();
+    const selection = window.getSelection();
     if (selection === null || selection.toString().length === 0) {
       clearSelect();
       return;
@@ -51,36 +51,58 @@
       showCategory = false;
       return;
     }
+    // @ts-ignore
+    const startIndex = selectedRange.startContainer.parentNode?.claim_order
+    // @ts-ignore
+    const endIndex = selectedRange.endContainer.parentNode?.claim_order
+
     const newAnnotation: Annotation = {
       text: selectedText,
       range: selectedRange,
       rects: selectedRects,
       category: category.name,
       color: category.color,
+      startIndex,
+      endIndex,
     };
     annotations = [...annotations, newAnnotation];
     showCategory = false;
   }
 
-  const getBorderStyle = (rect: DOMRect, borderColor: string) => {
-    return `top: ${rect.bottom}px; left: ${rect.left}px; width: ${rect.width}px; border-color: ${borderColor};`
+  type Char = {
+    text: string,
+    style: string,
   }
+
+  const textChars = (annotations: Annotation[]): Char[] => {
+    return text.split("").map((char, index) => {
+      const charAnnotations = annotations.filter(annotation => annotation.startIndex <= index && index <= annotation.endIndex)
+      const borderStyle = charAnnotations.length !== 0 ? `border-bottom: 2px solid ${charAnnotations[0].color};` : ''
+      return { text: char, style: borderStyle }
+    })
+  }
+
+  $: chars = textChars(annotations)
 </script>
 
 <div class="m-4">
   <div class="bg-white p-4 border rounded w-full min-h-[200px] min-w-[600px]" on:mouseup={handleMouseUp}>
-    <p>{text}</p>
-    {#if annotations.length > 0}
+    <p>
+      {#each chars as char, index (index)}
+        <span style={char.style}>{char.text}</span>
+      {/each}
+    </p>
+    <!-- {#if annotations.length > 0}
       {#each annotations as annotation, i (i)}
         {#each annotation.rects as rect, j (j)}
-          <div class="fixed border-b-2" style={getBorderStyle(rect, annotation.color)}>
+          <div class="absolute border-b-2" style={getBorderStyle(rect, annotation.color)}>
             {#if j === 0}
               <span class="fixed">{annotation.category}</span>
             {/if}
           </div>
         {/each}
       {/each}
-    {/if}
+    {/if} -->
   </div>
   <CategorySelectMenu show={showCategory} categories={categories} rect={selectedRects ? selectedRects[0] : null} on:select={onSelectCategory} />
 </div>

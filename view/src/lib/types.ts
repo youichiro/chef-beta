@@ -10,4 +10,6 @@ export type Annotation = {
   rects: DOMRectList;
   category: string;
   color: string;
+  startIndex: number;
+  endIndex: number;
 };

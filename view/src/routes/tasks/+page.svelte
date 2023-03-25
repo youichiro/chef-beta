@@ -4,9 +4,9 @@
     import type { Category } from "$lib/types";
 
     const categories: Category[] = [
-        { value: "名前", name: "名前", color: "yellow" },
+        { value: "名前", name: "名前", color: "#ffff00" },
         { value: "住所", name: "住所", color: "#98fb98" },
-        { value: "電話番号", name: "電話番号", color: "orange" },
+        { value: "電話番号", name: "電話番号", color: "#ffa500" },
     ]
     // const text = '私は小川耀一朗です';
     const text = '私は小川耀一朗ですあああああああああああああ私は小川耀一朗ですあああああああああああああ私は小川耀一朗ですあああああああああああああ';
