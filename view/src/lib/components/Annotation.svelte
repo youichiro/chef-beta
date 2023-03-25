@@ -8,16 +8,20 @@
   let selectedText = '';
   let selectedRange: Range | null = null;
   let selectedRect: DOMRect | null = null;
-  let annotations: Annotation[] = [];
   let showCategory = false;
+  let annotations: Annotation[] = [];
+
+  const clearSelect = () => {
+    selectedText = '';
+    selectedRange = null;
+    selectedRect = null;
+    showCategory = false;
+  }
 
   const handleMouseUp = () => {
     const selection = document.getSelection();
     if (selection === null || selection.toString().length === 0) {
-      selectedText = '';
-      selectedRange = null;
-      selectedRect = null;
-      showCategory = false;
+      clearSelect();
       return;
     }
     const range = selection.getRangeAt(0);
@@ -25,10 +29,7 @@
 
     const isSomeOverlapping = annotations.some(annotation => isOverlapping(range, annotation.range))
     if (isSomeOverlapping) {
-      selectedText = '';
-      selectedRange = null;
-      selectedRect = null;
-      showCategory = false;
+      clearSelect();
       return;
     }
 
@@ -50,21 +51,10 @@
       rect: selectedRect,
       category: category.name,
       color: category.color,
-      borderStyle: annotationBorderStyle(selectedRange, selectedRect, category.color),
+      borderStyle: `top: ${selectedRect.bottom}px; left: ${selectedRect.left}px; width: ${selectedRect.width}px; border-color: ${category.color};`
     };
     annotations = [...annotations, newAnnotation];
     showCategory = false;
-  }
-
-  const annotationBorderStyle = (range: Range, rect: DOMRect, color: string) => {
-    let yOffset = 0;
-
-    annotations.forEach(existingAnnotation => {
-      if (isOverlapping(range, existingAnnotation.range)) {
-        yOffset += 20;
-      }
-    })
-    return `top: ${rect.bottom + yOffset}px; left: ${rect.left}px; width: ${rect.width}px; border-color: ${color};`
   }
 
   const isOverlapping = (a: Range, b: Range) => {
