@@ -10,6 +10,9 @@
   let selectedRects: DOMRectList | null = null;
   let showCategory = false;
   let annotations: Annotation[] = [];
+  const maxCategoryLength = Math.max(...categories.map(category => category.name.length))
+  $: chars = textChars(annotations)
+
 
   const clearSelect = () => {
     selectedText = '';
@@ -79,13 +82,11 @@
       return { text: char, style: borderStyle }
     })
   }
-
-  $: chars = textChars(annotations)
 </script>
 
 <div class="m-4">
   <div class="bg-white p-4 border rounded w-full min-h-[200px] min-w-[600px]" on:mouseup={handleMouseUp}>
-    <p>
+    <p style={`margin-right: ${maxCategoryLength}em;`}>
       {#each chars as char, index (index)}
         <span style={char.style}>{char.text}</span>
       {/each}
