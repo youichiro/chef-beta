@@ -77,7 +77,8 @@
   const textChars = (annotations: Annotation[]): Char[] => {
     return text.split("").map((char, index) => {
       const charAnnotations = annotations.filter(annotation => annotation.startIndex <= index && index <= annotation.endIndex)
-      const borderStyle = charAnnotations.length !== 0 ? `border-bottom: 2px solid ${charAnnotations[0].color};` : ''
+      const annotation = charAnnotations.length !== 0 ? charAnnotations[0] : null;
+      const borderStyle = annotation ? `position: relative; border-bottom: 2px solid ${annotation.color};` : '';
       return { text: char, style: borderStyle }
     })
   }
