@@ -6,15 +6,15 @@
   export let text: string;
 
   let selectedText = '';
-  let selectedRects: DOMRectList | null = null;
   let selectedRangeIndex: RangeIndex | null = null;
+  let selectedRects: DOMRectList | null = null;
   let showCategory = false;
   let annotations: Annotation[] = [];
 
   const clearSelect = () => {
     selectedText = '';
-    selectedRects = null;
     selectedRangeIndex = null;
+    selectedRects = null;
     showCategory = false;
   }
 
@@ -39,15 +39,14 @@
     const endIndex = range.endContainer.parentNode?.claim_order
     const rangeIndex: RangeIndex = { start: startIndex, end: endIndex }
 
-    const rects = range.getClientRects();
     const isSomeOverlapping = annotations.some(annotation => isOverlapping(rangeIndex, annotation.rangeIndex))
     if (isSomeOverlapping) {
       clearSelect();
       return;
     }
     selectedText = selection.toString();
-    selectedRects = rects;
     selectedRangeIndex = rangeIndex;
+    selectedRects = range.getClientRects();
     showCategory = true;
   }
 
@@ -91,17 +90,17 @@
         <span style={char.style}>{char.text}</span>
       {/each}
     </p>
-    <!-- {#if annotations.length > 0}
+    {#if annotations.length > 0}
       {#each annotations as annotation, i (i)}
         {#each annotation.rects as rect, j (j)}
-          <div class="absolute border-b-2" style={getBorderStyle(rect, annotation.color)}>
+          <div class="absolute border-b-2" style={`top: ${rect.bottom}px; left: ${rect.left}px;`}>
             {#if j === 0}
               <span class="fixed">{annotation.category}</span>
             {/if}
           </div>
         {/each}
       {/each}
-    {/if} -->
+    {/if}
   </div>
   <CategorySelectMenu show={showCategory} categories={categories} rect={selectedRects ? selectedRects[0] : null} on:select={onSelectCategory} />
 </div>
