@@ -13,19 +13,29 @@
 
   const handleMouseUp = () => {
     const selection = document.getSelection();
-    if (selection && selection.toString().length > 0) {
-      const range = selection.getRangeAt(0);
-      const rect = range.getBoundingClientRect();
-      selectedText = selection.toString();
-      selectedRange = range;
-      selectedRect = rect;
-      showCategory = true;
-    } else {
+    if (selection === null || selection.toString().length === 0) {
       selectedText = '';
       selectedRange = null;
       selectedRect = null;
       showCategory = false;
+      return;
     }
+    const range = selection.getRangeAt(0);
+    const rect = range.getBoundingClientRect();
+
+    const isSomeOverlapping = annotations.some(annotation => isOverlapping(range, annotation.range))
+    if (isSomeOverlapping) {
+      selectedText = '';
+      selectedRange = null;
+      selectedRect = null;
+      showCategory = false;
+      return;
+    }
+
+    selectedText = selection.toString();
+    selectedRange = range;
+    selectedRect = rect;
+    showCategory = true;
   }
 
   const onSelectCategory = (event: CustomEvent) => {
@@ -58,10 +68,10 @@
   }
 
   const isOverlapping = (a: Range, b: Range) => {
-    if (a.startOffset >= b.startOffset && a.startOffset <= b.endOffset) { return true };
-    if (a.endOffset >= b.startOffset && a.endOffset <= b.endOffset) { return true };
-    if (b.startOffset >= a.startOffset && b.startOffset <= a.endOffset) { return true };
-    if (b.endOffset >= a.startOffset && b.endOffset <= a.endOffset) { return true };
+    if (a.startOffset > b.startOffset && a.startOffset < b.endOffset) { return true };
+    if (a.endOffset > b.startOffset && a.endOffset < b.endOffset) { return true };
+    if (b.startOffset > a.startOffset && b.startOffset < a.endOffset) { return true };
+    if (b.endOffset > a.startOffset && b.endOffset < a.endOffset) { return true };
     return false;
   }
 </script>
