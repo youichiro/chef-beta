@@ -7,53 +7,14 @@
 
   let selectedText = '';
   let selectedRange: Range | null = null;
-  let selectedRect: DOMRect | null = null;
+  let selectedRects: DOMRectList | null = null;
   let showCategory = false;
   let annotations: Annotation[] = [];
 
   const clearSelect = () => {
     selectedText = '';
     selectedRange = null;
-    selectedRect = null;
-    showCategory = false;
-  }
-
-  const handleMouseUp = () => {
-    const selection = document.getSelection();
-    if (selection === null || selection.toString().length === 0) {
-      clearSelect();
-      return;
-    }
-    const range = selection.getRangeAt(0);
-    const rect = range.getBoundingClientRect();
-
-    const isSomeOverlapping = annotations.some(annotation => isOverlapping(range, annotation.range))
-    if (isSomeOverlapping) {
-      clearSelect();
-      return;
-    }
-
-    selectedText = selection.toString();
-    selectedRange = range;
-    selectedRect = rect;
-    showCategory = true;
-  }
-
-  const onSelectCategory = (event: CustomEvent) => {
-    const category = event.detail.category;
-    if (selectedRange === null || selectedRect === null) {
-      showCategory = false;
-      return;
-    }
-    const newAnnotation: Annotation = {
-      text: selectedText,
-      range: selectedRange,
-      rect: selectedRect,
-      category: category.name,
-      color: category.color,
-      borderStyle: `top: ${selectedRect.bottom}px; left: ${selectedRect.left}px; width: ${selectedRect.width}px; border-color: ${category.color};`
-    };
-    annotations = [...annotations, newAnnotation];
+    selectedRects = null;
     showCategory = false;
   }
 
@@ -64,6 +25,46 @@
     if (b.endOffset > a.startOffset && b.endOffset < a.endOffset) { return true };
     return false;
   }
+
+  const handleMouseUp = () => {
+    const selection = document.getSelection();
+    if (selection === null || selection.toString().length === 0) {
+      clearSelect();
+      return;
+    }
+    const range = selection.getRangeAt(0);
+    const rects = range.getClientRects();
+    const isSomeOverlapping = annotations.some(annotation => isOverlapping(range, annotation.range))
+    if (isSomeOverlapping) {
+      clearSelect();
+      return;
+    }
+    selectedText = selection.toString();
+    selectedRange = range;
+    selectedRects = rects;
+    showCategory = true;
+  }
+
+  const onSelectCategory = (event: CustomEvent) => {
+    const category = event.detail.category;
+    if (selectedRange === null || selectedRects === null) {
+      showCategory = false;
+      return;
+    }
+    const newAnnotation: Annotation = {
+      text: selectedText,
+      range: selectedRange,
+      rects: selectedRects,
+      category: category.name,
+      color: category.color,
+    };
+    annotations = [...annotations, newAnnotation];
+    showCategory = false;
+  }
+
+  const getBorderStyle = (rect: DOMRect, borderColor: string) => {
+    return `top: ${rect.bottom}px; left: ${rect.left}px; width: ${rect.width}px; border-color: ${borderColor};`
+  }
 </script>
 
 <div class="m-4">
@@ -71,11 +72,15 @@
     <p>{text}</p>
     {#if annotations.length > 0}
       {#each annotations as annotation, i (i)}
-        <div class="fixed border-b-2" style={annotation.borderStyle}>
-          <span class="fixed">{annotation.category}</span>
-        </div>
+        {#each annotation.rects as rect, j (j)}
+          <div class="fixed border-b-2" style={getBorderStyle(rect, annotation.color)}>
+            {#if j === 0}
+              <span class="fixed">{annotation.category}</span>
+            {/if}
+          </div>
+        {/each}
       {/each}
     {/if}
   </div>
-  <CategorySelectMenu show={showCategory} categories={categories} rect={selectedRect} on:select={onSelectCategory} />
+  <CategorySelectMenu show={showCategory} categories={categories} rect={selectedRects ? selectedRects[0] : null} on:select={onSelectCategory} />
 </div>

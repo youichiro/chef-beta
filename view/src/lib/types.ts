@@ -7,8 +7,7 @@ export type Category = {
 export type Annotation = {
   text: string;
   range: Range;
-  rect: DOMRect;
+  rects: DOMRectList;
   category: string;
   color: string;
-  borderStyle: string;
 };
