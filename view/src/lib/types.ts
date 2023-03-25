@@ -5,10 +5,10 @@ export type Category = {
 }
 
 export type Annotation = {
-  start: number;
-  end: number;
   text: string;
+  range: Range;
+  rect: DOMRect;
   category: string;
   color: string;
-  rect: DOMRect | null;
+  borderStyle: string;
 };

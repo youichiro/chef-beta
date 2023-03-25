@@ -6,8 +6,7 @@
   export let text: string;
 
   let selectedText = '';
-  let selectedStart = 0;
-  let selectedEnd = 0;
+  let selectedRange: Range | null = null;
   let selectedRect: DOMRect | null = null;
   let annotations: Annotation[] = [];
   let showCategory = false;
@@ -15,15 +14,15 @@
   const handleMouseUp = () => {
     const selection = document.getSelection();
     if (selection && selection.toString().length > 0) {
-      selectedText = selection.toString();
       const range = selection.getRangeAt(0);
-      selectedStart = range.startOffset;
-      selectedEnd = range.endOffset;
-      selectedRect = range.getBoundingClientRect();
+      const rect = range.getBoundingClientRect();
+      selectedText = selection.toString();
+      selectedRange = range;
+      selectedRect = rect;
       showCategory = true;
     } else {
       selectedText = '';
-      selectedStart = selectedEnd = 0;
+      selectedRange = null;
       selectedRect = null;
       showCategory = false;
     }
@@ -31,20 +30,41 @@
 
   const onSelectCategory = (event: CustomEvent) => {
     const category = event.detail.category;
+    if (selectedRange === null || selectedRect === null) {
+      showCategory = false;
+      return;
+    }
     const newAnnotation: Annotation = {
-      start: selectedStart,
-      end: selectedEnd,
       text: selectedText,
+      range: selectedRange,
+      rect: selectedRect,
       category: category.name,
       color: category.color,
-      rect: selectedRect,
+      borderStyle: "",
     };
+    newAnnotation.borderStyle = annotationBorderStyle(newAnnotation);
     annotations = [...annotations, newAnnotation];
     showCategory = false;
   }
 
   const annotationBorderStyle = (annotation: Annotation) => {
-    return `top: ${annotation.rect?.bottom}px; left: ${annotation.rect?.left}px; width: ${annotation.rect?.width}px; border-color: ${annotation.color};`
+    let yOffset = 0;
+
+    annotations.forEach(existingAnnotation => {
+      if (isOverlapping(annotation.range, existingAnnotation.range)) {
+        yOffset += 20;
+      }
+    })
+    const top = annotation.rect ? annotation.rect.bottom + yOffset : 0
+    return `top: ${top}px; left: ${annotation.rect?.left}px; width: ${annotation.rect?.width}px; border-color: ${annotation.color};`
+  }
+
+  const isOverlapping = (a: Range, b: Range) => {
+    if (a.startOffset >= b.startOffset && a.startOffset <= b.endOffset) { return true };
+    if (a.endOffset >= b.startOffset && a.endOffset <= b.endOffset) { return true };
+    if (b.startOffset >= a.startOffset && b.startOffset <= a.endOffset) { return true };
+    if (b.endOffset >= a.startOffset && b.endOffset <= a.endOffset) { return true };
+    return false;
   }
 </script>
 
@@ -53,7 +73,7 @@
     <p>{text}</p>
     {#if annotations.length > 0}
       {#each annotations as annotation, i (i)}
-        <div class="fixed border-b-2" style={annotationBorderStyle(annotation)}>
+        <div class="fixed border-b-2" style={annotation.borderStyle}>
           <span class="fixed">{annotation.category}</span>
         </div>
       {/each}
