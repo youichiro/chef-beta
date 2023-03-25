@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type  { Category, Annotation } from "$lib/types";
+  import type  { Category, Annotation, RangeIndex, Char } from "$lib/types";
   import CategorySelectMenu from "./CategorySelectMenu.svelte";
 
   export let categories: Category[];
@@ -8,6 +8,7 @@
   let selectedText = '';
   let selectedRange: Range | null = null;
   let selectedRects: DOMRectList | null = null;
+  let selectedRangeIndex: RangeIndex | null = null;
   let showCategory = false;
   let annotations: Annotation[] = [];
 
@@ -15,14 +16,15 @@
     selectedText = '';
     selectedRange = null;
     selectedRects = null;
+    selectedRangeIndex = null;
     showCategory = false;
   }
 
-  const isOverlapping = (a: Range, b: Range) => {
-    if (a.startOffset > b.startOffset && a.startOffset < b.endOffset) { return true };
-    if (a.endOffset > b.startOffset && a.endOffset < b.endOffset) { return true };
-    if (b.startOffset > a.startOffset && b.startOffset < a.endOffset) { return true };
-    if (b.endOffset > a.startOffset && b.endOffset < a.endOffset) { return true };
+  const isOverlapping = (a: RangeIndex, b: RangeIndex) => {
+    if (a.start >= b.start && a.start <= b.end) { return true };
+    if (a.end >= b.start && a.end <= b.end) { return true };
+    if (b.start >= a.start && b.start <= a.end) { return true };
+    if (b.end >= a.start && b.end <= a.end) { return true };
     return false;
   }
 
@@ -33,8 +35,14 @@
       return;
     }
     const range = selection.getRangeAt(0);
+    // @ts-ignore
+    const startIndex = range.startContainer.parentNode?.claim_order
+    // @ts-ignore
+    const endIndex = range.endContainer.parentNode?.claim_order
+    const rangeIndex: RangeIndex = { start: startIndex, end: endIndex }
+
     const rects = range.getClientRects();
-    const isSomeOverlapping = annotations.some(annotation => isOverlapping(range, annotation.range))
+    const isSomeOverlapping = annotations.some(annotation => isOverlapping(rangeIndex, annotation.rangeIndex))
     if (isSomeOverlapping) {
       clearSelect();
       return;
@@ -42,19 +50,16 @@
     selectedText = selection.toString();
     selectedRange = range;
     selectedRects = rects;
+    selectedRangeIndex = rangeIndex;
     showCategory = true;
   }
 
   const onSelectCategory = (event: CustomEvent) => {
     const category = event.detail.category;
-    if (selectedRange === null || selectedRects === null) {
+    if (selectedRange === null || selectedRects === null || selectedRangeIndex === null) {
       showCategory = false;
       return;
     }
-    // @ts-ignore
-    const startIndex = selectedRange.startContainer.parentNode?.claim_order
-    // @ts-ignore
-    const endIndex = selectedRange.endContainer.parentNode?.claim_order
 
     const newAnnotation: Annotation = {
       text: selectedText,
@@ -62,23 +67,20 @@
       rects: selectedRects,
       category: category.name,
       color: category.color,
-      startIndex,
-      endIndex,
+      rangeIndex: selectedRangeIndex,
     };
     annotations = [...annotations, newAnnotation];
     showCategory = false;
   }
 
-  type Char = {
-    text: string,
-    style: string,
-  }
-
   const textChars = (annotations: Annotation[]): Char[] => {
     return text.split("").map((char, index) => {
-      const charAnnotations = annotations.filter(annotation => annotation.startIndex <= index && index <= annotation.endIndex)
-      const annotation = charAnnotations.length !== 0 ? charAnnotations[0] : null;
-      const borderStyle = annotation ? `position: relative; border-bottom: 2px solid ${annotation.color};` : '';
+      const charAnnotations = annotations.filter(annotation => annotation.rangeIndex.start <= index && index <= annotation.rangeIndex.end)
+      if (charAnnotations.length === 0) {
+        return { text: char, style: '' }
+      }
+      const annotation =charAnnotations[0];
+      const borderStyle = `border-bottom: 2px solid ${annotation.color};`;
       return { text: char, style: borderStyle }
     })
   }

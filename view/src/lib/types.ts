@@ -4,12 +4,21 @@ export type Category = {
   color: string;
 }
 
+export type RangeIndex = {
+  start: number,
+  end: number,
+}
+
 export type Annotation = {
   text: string;
   range: Range;
   rects: DOMRectList;
   category: string;
   color: string;
-  startIndex: number;
-  endIndex: number;
+  rangeIndex: RangeIndex;
 };
+
+export type Char = {
+  text: string,
+  style: string,
+}
