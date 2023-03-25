@@ -40,23 +40,21 @@
       rect: selectedRect,
       category: category.name,
       color: category.color,
-      borderStyle: "",
+      borderStyle: annotationBorderStyle(selectedRange, selectedRect, category.color),
     };
-    newAnnotation.borderStyle = annotationBorderStyle(newAnnotation);
     annotations = [...annotations, newAnnotation];
     showCategory = false;
   }
 
-  const annotationBorderStyle = (annotation: Annotation) => {
+  const annotationBorderStyle = (range: Range, rect: DOMRect, color: string) => {
     let yOffset = 0;
 
     annotations.forEach(existingAnnotation => {
-      if (isOverlapping(annotation.range, existingAnnotation.range)) {
+      if (isOverlapping(range, existingAnnotation.range)) {
         yOffset += 20;
       }
     })
-    const top = annotation.rect ? annotation.rect.bottom + yOffset : 0
-    return `top: ${top}px; left: ${annotation.rect?.left}px; width: ${annotation.rect?.width}px; border-color: ${annotation.color};`
+    return `top: ${rect.bottom + yOffset}px; left: ${rect.left}px; width: ${rect.width}px; border-color: ${color};`
   }
 
   const isOverlapping = (a: Range, b: Range) => {
