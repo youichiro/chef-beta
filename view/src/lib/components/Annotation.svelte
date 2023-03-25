@@ -6,7 +6,6 @@
   export let text: string;
 
   let selectedText = '';
-  let selectedRange: Range | null = null;
   let selectedRects: DOMRectList | null = null;
   let selectedRangeIndex: RangeIndex | null = null;
   let showCategory = false;
@@ -14,7 +13,6 @@
 
   const clearSelect = () => {
     selectedText = '';
-    selectedRange = null;
     selectedRects = null;
     selectedRangeIndex = null;
     showCategory = false;
@@ -48,7 +46,6 @@
       return;
     }
     selectedText = selection.toString();
-    selectedRange = range;
     selectedRects = rects;
     selectedRangeIndex = rangeIndex;
     showCategory = true;
@@ -56,18 +53,17 @@
 
   const onSelectCategory = (event: CustomEvent) => {
     const category = event.detail.category;
-    if (selectedRange === null || selectedRects === null || selectedRangeIndex === null) {
+    if (selectedRects === null || selectedRangeIndex === null) {
       showCategory = false;
       return;
     }
 
     const newAnnotation: Annotation = {
       text: selectedText,
-      range: selectedRange,
+      rangeIndex: selectedRangeIndex,
       rects: selectedRects,
       category: category.name,
       color: category.color,
-      rangeIndex: selectedRangeIndex,
     };
     annotations = [...annotations, newAnnotation];
     showCategory = false;

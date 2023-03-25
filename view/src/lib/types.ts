@@ -11,11 +11,10 @@ export type RangeIndex = {
 
 export type Annotation = {
   text: string;
-  range: Range;
+  rangeIndex: RangeIndex;
   rects: DOMRectList;
   category: string;
   color: string;
-  rangeIndex: RangeIndex;
 };
 
 export type Char = {
