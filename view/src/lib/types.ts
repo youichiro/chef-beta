@@ -20,4 +20,5 @@ export type Annotation = {
 export type Char = {
   text: string,
   style: string,
+  categoryName: string,
 }
