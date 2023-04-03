@@ -1,12 +1,13 @@
 <script lang="ts">
   import LabelSelectMenu from "$lib/components/LabelSelectMenu.svelte";
-    import type { RangeIndex } from "$lib/types";
+  import type { RangeIndex } from "$lib/types";
 
-  const text = "私は小川耀一朗です"
+  const text = "私は小川耀一朗です 私は小川耀一朗です 私は小川耀一朗です 私は小川耀一朗です"
   const labels = [
     { name: "名前", color: "blue-500" },
     { name: "メールアドレス", color: "orange-500" },
   ]
+  const maxLabelNameLength = Math.max(...labels.map(label => label.name.length))
   let annotations: any[] = []
   let selectedRangeIndex: RangeIndex | null = null;
   let menu: any = { show: false, top: null, left: null }
@@ -116,7 +117,7 @@
     <svg class="w-full">
       <g>
         <foreignObject width="100%" height="100%">
-          <p on:mouseup={handleMouseUp}>
+          <p style={`margin-right: ${maxLabelNameLength}em;`} on:mouseup={handleMouseUp}>
             {#each chars as char}
               <span class={char.className}>{char.text}</span>
             {/each}
