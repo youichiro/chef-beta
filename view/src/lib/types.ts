@@ -1,7 +1,6 @@
-export type Category = {
-  value: string;
-  name: string;
-  color: string;
+export type Label = {
+  name: string,
+  color: string,
 }
 
 export type RangeIndex = {

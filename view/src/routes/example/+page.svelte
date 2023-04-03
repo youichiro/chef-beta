@@ -1,10 +1,15 @@
 <script lang="ts">
+  import LabelSelectMenu from "$lib/components/LabelSelectMenu.svelte";
+    import type { RangeIndex } from "$lib/types";
+
   const text = "私は小川耀一朗です"
   const labels = [
-    { name: "名前", color: "blue" },
-    { name: "メールアドレス", color: "orange" },
+    { name: "名前", color: "blue-500" },
+    { name: "メールアドレス", color: "orange-500" },
   ]
   let annotations: any[] = []
+  let selectedRangeIndex: RangeIndex | null = null;
+  let menu: any = { show: false, top: null, left: null }
   $: chars = splitText(text, annotations)
   $: tags = getTags(annotations)
 
@@ -14,16 +19,16 @@
       if (!annotations || annotations.length === 0) {
         return span
       }
-      const matchAnnotations = annotations.filter(annotation => annotation.startIndex <= index && index <= annotation.endIndex)
+      const matchAnnotations = annotations.filter(annotation => annotation.rangeIndex.start <= index && index <= annotation.rangeIndex.end)
       if (matchAnnotations.length === 0) {
         return span
       }
       const matchAnnotation = matchAnnotations[0]
-      const showLabel = index === matchAnnotation.startIndex
+      const showLabel = index === matchAnnotation.rangeIndex.start
       return {
         text: char,
         index: index,
-        className: `span${index} border-b-2 border-blue-500`,
+        className: `span${index} border-b-2 border-${matchAnnotation.label.color}`,
         annotation: matchAnnotation,
         showLabel,
       }
@@ -35,11 +40,10 @@
       return []
     }
     const tags = annotations.map(annotation => {
-      const span = getSpan(`span${annotation.startIndex}`)
+      const span = getSpan(`span${annotation.rangeIndex.start}`)
       if (!span) {
         return null
       }
-      console.log(span)
       return { x: span.left, y: span.height + 22, labelName: annotation.label.name }
     }).filter(item => item)
     return tags
@@ -59,19 +63,52 @@
     }
   }
 
+  const isOverlapping = (a: RangeIndex, b: RangeIndex) => {
+    if (a.start >= b.start && a.start <= b.end) { return true };
+    if (a.end >= b.start && a.end <= b.end) { return true };
+    if (b.start >= a.start && b.start <= a.end) { return true };
+    if (b.end >= a.start && b.end <= a.end) { return true };
+    return false;
+  }
+
+  const clearSelection = () => {
+    selectedRangeIndex = null;
+    menu = { show: false, top: null, left: null };
+  }
+
   const handleMouseUp = () => {
     const selection = window.getSelection();
     if (selection === null || selection.toString().length === 0) {
+      clearSelection()
       return;
     }
     // @ts-ignore
-    const startIndex = selection.anchorNode.parentNode.claim_order
+    const start = selection.anchorNode.parentNode.claim_order
     // @ts-ignore
-    const endIndex = selection.focusNode.parentNode.claim_order
-    const newAnnotation = { label: labels[0], startIndex, endIndex }
-    annotations = [...annotations, newAnnotation]
+    const end = selection.focusNode.parentNode.claim_order
+    const rangeIndex: RangeIndex = { start, end }
+
+    const isSomeOverlapping = annotations.some(annotation => isOverlapping(rangeIndex, annotation.rangeIndex))
+    if (isSomeOverlapping) {
+      clearSelection()
+      return;
+    }
+
+    const range = selection.getRangeAt(0)
+    const rects = range.getClientRects()
+    const firstRect = rects[0]
+    selectedRangeIndex = rangeIndex;
+    menu = { show: true, top: firstRect.bottom, left: firstRect.left}
   }
 
+  const onSelectLabel = (event: CustomEvent) => {
+    const label = event.detail.label;
+    if (selectedRangeIndex !== null) {
+      const newAnnotation = { label, rangeIndex: selectedRangeIndex };
+      annotations = [...annotations, newAnnotation];
+    }
+    clearSelection()
+  }
 </script>
 
 <div class="m-4">
@@ -95,4 +132,5 @@
       </g>
     </svg>
   </div>
+  <LabelSelectMenu show={menu.show} labels={labels} top={menu.top} left={menu.left} on:select={onSelectLabel} />
 </div>
