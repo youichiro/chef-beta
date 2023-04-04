@@ -78,6 +78,7 @@
   }
 
   const handleMouseUp = () => {
+    console.log('handleMouseUp')
     const selection = window.getSelection();
     if (selection === null || selection.toString().length === 0) {
       clearSelection()
@@ -113,11 +114,11 @@
 </script>
 
 <div class="m-4">
-  <div class="relation bg-white p-4 border rounded w-full min-h-[200px] min-w-[400px]">
+  <div class="relation bg-white p-4 border rounded w-full min-h-[200px] min-w-[400px]" on:mouseup={handleMouseUp}>
     <svg class="w-full">
       <g>
         <foreignObject width="100%" height="100%">
-          <p style={`margin-right: ${maxLabelNameLength}em;`} on:mouseup={handleMouseUp}>
+          <p style={`margin-right: ${maxLabelNameLength}em;`}>
             {#each chars as char}
               <span class={char.className}>{char.text}</span>
             {/each}
@@ -133,5 +134,5 @@
       </g>
     </svg>
   </div>
-  <LabelSelectMenu show={menu.show} labels={labels} top={menu.top} left={menu.left} on:select={onSelectLabel} />
+  <LabelSelectMenu show={menu.show} labels={labels} top={menu.top} left={menu.left} on:select={onSelectLabel} on:close={() => clearSelection()} />
 </div>
