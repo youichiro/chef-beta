@@ -49,7 +49,6 @@
       }
       return { x: span.left, y: span.top + 40, labelName: annotation.label.name }
     }).filter(item => item)
-    console.log(tags)
     return tags
   }
 
@@ -83,7 +82,6 @@
   }
 
   const handleMouseUp = () => {
-    console.log('handleMouseUp')
     const selection = window.getSelection();
     if (selection === null || selection.toString().length === 0) {
       clearSelection()
