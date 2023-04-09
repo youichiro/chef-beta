@@ -10,9 +10,9 @@
   const styles = {
     sidebarItem: {
       base: "flex item-center py-3 px-4 text-gray-500 hover:bg-gray-50 hover:text-gray-700",
-      active: "flex item-center py-3 px-3 text-black border-l-4 border-orange-500"
+      active: "flex item-center py-3 px-3 text-black border-l-4 border-orange-500",
     },
-  }
+  };
 </script>
 
 <Drawer
@@ -28,17 +28,34 @@
     <SidebarWrapper divClass="overflow-y-auto py-4">
       <SidebarGroup ulClass="">
         <SidebarItem label="LOGO" />
-        <SidebarItem label="Home" href="/" active={activeUrl === "/"} aClass={styles.sidebarItem.base} activeClass={styles.sidebarItem.active}>
+        <SidebarItem
+          label="Home"
+          href="/"
+          active={activeUrl === "/"}
+          aClass={styles.sidebarItem.base}
+          activeClass={styles.sidebarItem.active}
+        >
           <svelte:fragment slot="icon">
             <Home />
           </svelte:fragment>
         </SidebarItem>
-        <SidebarItem label="Projects" href="/projects" active={activeUrl.startsWith("/projects")} aClass={styles.sidebarItem.base} activeClass={styles.sidebarItem.active}>
+        <SidebarItem
+          label="Projects"
+          href="/projects"
+          active={activeUrl.startsWith("/projects")}
+          aClass={styles.sidebarItem.base}
+          activeClass={styles.sidebarItem.active}
+        >
           <svelte:fragment slot="icon">
             <Folder />
           </svelte:fragment>
         </SidebarItem>
-        <SidebarItem label="Dashboard" href="/" aClass={styles.sidebarItem.base} activeClass={styles.sidebarItem.active}>
+        <SidebarItem
+          label="Dashboard"
+          href="/"
+          aClass={styles.sidebarItem.base}
+          activeClass={styles.sidebarItem.active}
+        >
           <svelte:fragment slot="icon">
             <ChartBar />
           </svelte:fragment>

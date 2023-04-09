@@ -1,31 +1,31 @@
 export type Label = {
-  name: string,
-  color: string,
-}
+  name: string;
+  color: string;
+};
 
 export type RangeIndex = {
-  start: number,
-  end: number,
-}
+  start: number;
+  end: number;
+};
 
 export type Annotation = {
-  label: Label,
-  rangeIndex: RangeIndex,
-}
+  label: Label;
+  rangeIndex: RangeIndex;
+};
 
 export type Span = {
-  text: string,
-  index: number,
-  class: string,
-}
+  text: string;
+  index: number;
+  class: string;
+};
 
 export type AnnotationTag = {
-  x: number,
-  y: number,
-  label: Label,
-}
+  x: number;
+  y: number;
+  label: Label;
+};
 
 export type LabelSelectMenuOffset = {
-  top: number,
-  left: number,
-}
+  top: number;
+  left: number;
+};
