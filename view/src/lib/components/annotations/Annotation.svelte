@@ -1,5 +1,6 @@
 <script lang="ts">
   import LabelSelectMenu from "$lib/components/LabelSelectMenu.svelte";
+  import { getAnnotationTags, isOverlappingAnnotations } from "$lib/models/annotation";
   import { maxLabelNameLength } from "$lib/models/label";
   import type { RangeIndex, Label, Annotation, Span } from "$lib/types";
   import { onMount } from "svelte";
@@ -12,7 +13,7 @@
   let selectedRangeIndex: RangeIndex | null = null;
   let menu: any = { show: false, top: null, left: null }
   $: spans = splitText(text, annotations)
-  $: tags = getTags(annotations)
+  $: tags = getAnnotationTags(annotations)
 
   const splitText = (text: string, annotations: Annotation[]): Span[] => {
     return text.split("").map((char, index) => {
@@ -36,45 +37,6 @@
     })
   }
 
-  const getTags = (annotations: Annotation[]) => {
-    // アノテーションからタグの位置を計算して返す
-    if (!annotations || annotations.length === 0) {
-      return []
-    }
-    const tags = annotations.map(annotation => {
-      const span = getSpan(`span${annotation.rangeIndex.start}`)
-      if (!span) {
-        return null
-      }
-      return { x: span.left, y: span.top + 40, labelName: annotation.label.name, labelColor: annotation.label.color}
-    }).filter(item => item)
-    return tags
-  }
-
-  const getSpan = (className: string) => {
-    // 指定したクラス名のエレメントの位置を取得して返す
-    const spanElms = document.getElementsByClassName(className) as HTMLCollectionOf<HTMLSpanElement>;
-    if (!spanElms || spanElms.length === 0) {
-      return
-    }
-    const span = spanElms[0];
-    return {
-      top: span.offsetTop,
-      left: span.offsetLeft,
-      width: span.offsetWidth,
-      height: span.offsetHeight,
-    }
-  }
-
-  const isOverlappingIndex = (a: RangeIndex, b: RangeIndex) => {
-    // インデックスが重なっているかどうか
-    if (a.start >= b.start && a.start <= b.end) { return true };
-    if (a.end >= b.start && a.end <= b.end) { return true };
-    if (b.start >= a.start && b.start <= a.end) { return true };
-    if (b.end >= a.start && b.end <= a.end) { return true };
-    return false;
-  }
-
   const clearSelection = () => {
     selectedRangeIndex = null;
     menu = { show: false, top: null, left: null };
@@ -92,8 +54,7 @@
     const end = selection.focusNode.parentNode.claim_order
     const rangeIndex: RangeIndex = { start, end }
 
-    const isSomeOverlapping = annotations.some(annotation => isOverlappingIndex(rangeIndex, annotation.rangeIndex))
-    if (isSomeOverlapping) {
+    if (isOverlappingAnnotations(rangeIndex, annotations)) {
       clearSelection()
       return;
     }
@@ -143,7 +104,7 @@
       </foreignObject>
       {#if tags.length > 0}
         {#each tags as tag}
-          <text x={tag?.x} y={tag?.y} class={`select-none text-sm font-bold fill-${tag?.labelColor}`}>{tag?.labelName}</text>
+          <text x={tag.x} y={tag.y} class={`select-none text-sm font-bold fill-${tag.label.color}`}>{tag.label.name}</text>
         {/each}
       {/if}
     </svg>

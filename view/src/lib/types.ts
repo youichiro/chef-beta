@@ -20,3 +20,9 @@ export type Span = {
   annotation?: Annotation,
   showLabel?: boolean,
 }
+
+export type AnnotationTag = {
+  x: number,
+  y: number,
+  label: Label,
+}
