@@ -16,6 +16,25 @@
   $: spans = splitText(text, annotations)
   $: tags = getAnnotationTags(annotations)
 
+  onMount(() => {
+    adjustSvgHeight()
+  })
+
+  const adjustSvgHeight = () => {
+    const svg = document.getElementById('svg');
+    const text = document.getElementById('text');
+    if (svg === null || text === null) {
+      return
+    }
+    const observer = new ResizeObserver(entries => {
+      for (let entry of entries) {
+        const height = entry.contentRect.height;
+        svg.setAttribute('height', `${height + 20}`);
+      }
+    });
+    observer.observe(text);
+  }
+
   const splitText = (text: string, annotations: Annotation[]): Span[] => {
     return text.split("").map((char, index) => {
       const span: Span = { text: char, index: index, class: `span${index}` }
@@ -28,6 +47,7 @@
       }
       const matchAnnotation = matchAnnotations[0]
       const showLabel = index === matchAnnotation.rangeIndex.start
+
       return {
         text: char,
         index: index,
@@ -75,22 +95,6 @@
     }
     clearSelection()
   }
-
-  const adjastSvgHeight = () => {
-    const svg: any = document.getElementById('svg');
-    const textElement: any = document.getElementById('text');
-    const observer = new ResizeObserver(entries => {
-      for (let entry of entries) {
-        const height = entry.contentRect.height;
-        svg.setAttribute('height', height + 20);
-      }
-    });
-    observer.observe(textElement);
-  }
-
-  onMount(() => {
-    adjastSvgHeight()
-  })
 </script>
 
 <div class="m-4">
