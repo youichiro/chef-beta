@@ -32,3 +32,16 @@ export const isOverlappingAnnotations = (rangeIndex: RangeIndex, annotations: An
   }
   return annotations.some(annotation => isOverlappingIndex(rangeIndex, annotation.rangeIndex))
 }
+
+
+export const getMatchAnnotation = (index: number, annotations: Annotation[]): Annotation | null => {
+  if (annotations.length === 0) {
+    return null
+  }
+  const matchAnnotations = annotations.filter(annotation => annotation.rangeIndex.start <= index && index <= annotation.rangeIndex.end)
+  if (matchAnnotations.length === 0) {
+    return null
+  }
+  const matchAnnotation = matchAnnotations[0]
+  return matchAnnotation;
+}

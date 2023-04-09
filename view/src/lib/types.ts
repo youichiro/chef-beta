@@ -17,8 +17,6 @@ export type Span = {
   text: string,
   index: number,
   class: string,
-  annotation?: Annotation,
-  showLabel?: boolean,
 }
 
 export type AnnotationTag = {

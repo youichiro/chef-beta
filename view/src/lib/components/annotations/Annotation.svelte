@@ -1,6 +1,6 @@
 <script lang="ts">
   import LabelSelectMenu from "$lib/components/LabelSelectMenu.svelte";
-  import { getAnnotationTags, isOverlappingAnnotations } from "$lib/models/annotation";
+  import { getAnnotationTags, getMatchAnnotation, isOverlappingAnnotations } from "$lib/models/annotation";
   import { maxLabelNameLength } from "$lib/models/label";
   import type { RangeIndex, Label, Annotation, Span, LabelSelectMenuOffset } from "$lib/types";
   import { onMount } from "svelte";
@@ -13,7 +13,7 @@
   let selectedRangeIndex: RangeIndex | null = null;
   let menu: LabelSelectMenuOffset | null = null;
 
-  $: spans = splitText(text, annotations)
+  $: spans = splitTextToSpans(text, annotations)
   $: tags = getAnnotationTags(annotations)
 
   onMount(() => {
@@ -35,25 +35,17 @@
     observer.observe(text);
   }
 
-  const splitText = (text: string, annotations: Annotation[]): Span[] => {
+  const splitTextToSpans = (text: string, annotations: Annotation[]): Span[] => {
     return text.split("").map((char, index) => {
       const span: Span = { text: char, index: index, class: `span${index}` }
-      if (!annotations || annotations.length === 0) {
+      const matchAnnotation = getMatchAnnotation(index, annotations);
+      if (matchAnnotation === null) {
         return span
-      }
-      const matchAnnotations = annotations.filter(annotation => annotation.rangeIndex.start <= index && index <= annotation.rangeIndex.end)
-      if (matchAnnotations.length === 0) {
-        return span
-      }
-      const matchAnnotation = matchAnnotations[0]
-      const showLabel = index === matchAnnotation.rangeIndex.start
-
-      return {
-        text: char,
-        index: index,
-        class: `span${index} border-b-2 border-${matchAnnotation.label.color}`,
-        annotation: matchAnnotation,
-        showLabel,
+      } else {
+        return {
+          ...span,
+          class: `span${index} border-b-2 border-${matchAnnotation.label.color}`,
+        }
       }
     })
   }
