@@ -87,7 +87,26 @@
     }
     clearSelection();
   };
+
+  const handleClickTag = () => {
+    console.log('handleClickTag')
+    alert('hoge');
+    window.getSelection()?.removeAllRanges();
+  }
+
+  const handleKeyDownTag = (event: KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      handleClickTag();
+    }
+    window.getSelection()?.removeAllRanges();
+  }
 </script>
+
+<style>
+  text:focus {
+    outline: 1px solid skyblue;
+  }
+</style>
 
 <div class="m-4">
   <div class="bg-white p-4 border rounded" on:mouseup={handleMouseUp}>
@@ -100,9 +119,9 @@
         </p>
       </foreignObject>
       {#each tags as tag}
-        <text x={tag.x} y={tag.y} class={`select-none text-sm font-bold fill-${tag.label.color}`}
-          >{tag.label.name}</text
-        >
+        <text x={tag.x} y={tag.y} class={`select-none text-sm font-bold fill-${tag.label.color}`} on:click={handleClickTag} tabIndex="0" on:keydown={handleKeyDownTag}>
+          {tag.label.name}
+        </text>
       {/each}
     </svg>
   </div>
