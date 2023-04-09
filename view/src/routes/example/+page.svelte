@@ -5,8 +5,9 @@
 
   const text = "私は小川耀一朗です 私は小川耀一朗です 私は小川耀一朗です 私は小川耀一朗です 私は小川耀一朗です 私は小川耀一朗です 私は小川耀一朗です 私は小川耀一朗です 私は小川耀一朗です 私は小川耀一朗です 私は小川耀一朗です 私は小川耀一朗です"
   const labels = [
-    { name: "名前", color: "blue-500" },
+    { name: "名前", color: "green-500" },
     { name: "メールアドレス", color: "orange-500" },
+    { name: "住所", color: "blue-500" },
   ]
   const maxLabelNameLength = Math.max(...labels.map(label => label.name.length))
   let annotations: any[] = []
@@ -17,7 +18,7 @@
 
   const splitText = (text: string, annotations: any[]) => {
     return text.split("").map((char, index) => {
-      const span = { text: char, index: index, className: `span span${index}` }
+      const span = { text: char, index: index, className: `span${index}` }
       if (!annotations || annotations.length === 0) {
         return span
       }
@@ -30,7 +31,7 @@
       return {
         text: char,
         index: index,
-        className: `span span${index} border-b-2 border-${matchAnnotation.label.color}`,
+        className: `span${index} border-b-2 border-${matchAnnotation.label.color}`,
         annotation: matchAnnotation,
         showLabel,
       }
@@ -47,7 +48,7 @@
       if (!span) {
         return null
       }
-      return { x: span.left, y: span.top + 40, labelName: annotation.label.name }
+      return { x: span.left, y: span.top + 40, labelName: annotation.label.name, labelColor: annotation.label.color}
     }).filter(item => item)
     return tags
   }
@@ -144,7 +145,7 @@
       </foreignObject>
       {#if tags.length > 0}
         {#each tags as tag}
-          <text x={tag?.x} y={tag?.y} class="select-none text-sm">{tag?.labelName}</text>
+          <text x={tag?.x} y={tag?.y} class={`select-none text-sm font-bold fill-${tag?.labelColor}`}>{tag?.labelName}</text>
         {/each}
       {/if}
     </svg>
