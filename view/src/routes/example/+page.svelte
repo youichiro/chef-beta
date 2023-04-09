@@ -37,6 +37,7 @@
   }
 
   const getTags = (annotations: any[]) => {
+    // アノテーションからタグの位置を計算して返す
     if (!annotations || annotations.length === 0) {
       return []
     }
@@ -51,6 +52,7 @@
   }
 
   const getSpan = (className: string) => {
+    // 指定したクラス名のエレメントの位置を取得して返す
     const spanElms = document.getElementsByClassName(className) as HTMLCollectionOf<HTMLSpanElement>;
     if (!spanElms || spanElms.length === 0) {
       return
@@ -64,7 +66,8 @@
     }
   }
 
-  const isOverlapping = (a: RangeIndex, b: RangeIndex) => {
+  const isOverlappingIndex = (a: RangeIndex, b: RangeIndex) => {
+    // インデックスが重なっているかどうか
     if (a.start >= b.start && a.start <= b.end) { return true };
     if (a.end >= b.start && a.end <= b.end) { return true };
     if (b.start >= a.start && b.start <= a.end) { return true };
@@ -90,7 +93,7 @@
     const end = selection.focusNode.parentNode.claim_order
     const rangeIndex: RangeIndex = { start, end }
 
-    const isSomeOverlapping = annotations.some(annotation => isOverlapping(rangeIndex, annotation.rangeIndex))
+    const isSomeOverlapping = annotations.some(annotation => isOverlappingIndex(rangeIndex, annotation.rangeIndex))
     if (isSomeOverlapping) {
       clearSelection()
       return;
@@ -136,3 +139,9 @@
   </div>
   <LabelSelectMenu show={menu.show} labels={labels} top={menu.top} left={menu.left} on:select={onSelectLabel} on:close={() => clearSelection()} />
 </div>
+
+<!--
+TODO:
+- ラベルが重なった時にレイヤーを分ける
+- 行間を変える
+-->
