@@ -1,8 +1,9 @@
 <script lang="ts">
   import LabelSelectMenu from "$lib/components/LabelSelectMenu.svelte";
   import type { RangeIndex } from "$lib/types";
+  import { onMount } from "svelte";
 
-  const text = "私は小川耀一朗です 私は小川耀一朗です 私は小川耀一朗です 私は小川耀一朗です"
+  const text = "私は小川耀一朗です 私は小川耀一朗です 私は小川耀一朗です 私は小川耀一朗です 私は小川耀一朗です 私は小川耀一朗です 私は小川耀一朗です 私は小川耀一朗です 私は小川耀一朗です 私は小川耀一朗です 私は小川耀一朗です 私は小川耀一朗です"
   const labels = [
     { name: "名前", color: "blue-500" },
     { name: "メールアドレス", color: "orange-500" },
@@ -16,7 +17,7 @@
 
   const splitText = (text: string, annotations: any[]) => {
     return text.split("").map((char, index) => {
-      const span = { text: char, index: index, className: `span${index}` }
+      const span = { text: char, index: index, className: `span span${index}` }
       if (!annotations || annotations.length === 0) {
         return span
       }
@@ -29,7 +30,7 @@
       return {
         text: char,
         index: index,
-        className: `span${index} border-b-2 border-${matchAnnotation.label.color}`,
+        className: `span span${index} border-b-2 border-${matchAnnotation.label.color}`,
         annotation: matchAnnotation,
         showLabel,
       }
@@ -46,8 +47,9 @@
       if (!span) {
         return null
       }
-      return { x: span.left, y: span.height + 22, labelName: annotation.label.name }
+      return { x: span.left, y: span.top + 40, labelName: annotation.label.name }
     }).filter(item => item)
+    console.log(tags)
     return tags
   }
 
@@ -114,34 +116,40 @@
     }
     clearSelection()
   }
+
+  const adjastSvgHeight = () => {
+    const svg: any = document.getElementById('svg');
+    const textElement: any = document.getElementById('text');
+    const observer = new ResizeObserver(entries => {
+      for (let entry of entries) {
+        const height = entry.contentRect.height;
+        svg.setAttribute('height', height + 20);
+      }
+    });
+    observer.observe(textElement);
+  }
+
+  onMount(() => {
+    adjastSvgHeight()
+  })
 </script>
 
 <div class="m-4">
-  <div class="relation bg-white p-4 border rounded w-full min-h-[200px] min-w-[400px]" on:mouseup={handleMouseUp}>
-    <svg class="w-full">
-      <g>
-        <foreignObject width="100%" height="100%">
-          <p style={`margin-right: ${maxLabelNameLength}em;`}>
-            {#each chars as char}
-              <span class={char.className}>{char.text}</span>
-            {/each}
-          </p>
-        </foreignObject>
-        <g>
-          {#if tags.length > 0}
-            {#each tags as tag}
-              <text x={tag?.x} y={tag?.y} class="select-none">{tag?.labelName}</text>
-            {/each}
-          {/if}
-        </g>
-      </g>
+  <div class="bg-white p-4 border rounded" on:mouseup={handleMouseUp}>
+    <svg id="svg" class="w-full h-full">
+      <foreignObject width="100%" height="100%">
+        <p id="text" style={`margin-right: ${maxLabelNameLength}em; line-height: 3em;`} class="text-lg">
+          {#each chars as char}
+            <span class={char.className}>{char.text}</span>
+          {/each}
+        </p>
+      </foreignObject>
+      {#if tags.length > 0}
+        {#each tags as tag}
+          <text x={tag?.x} y={tag?.y} class="select-none text-sm">{tag?.labelName}</text>
+        {/each}
+      {/if}
     </svg>
   </div>
   <LabelSelectMenu show={menu.show} labels={labels} top={menu.top} left={menu.left} on:select={onSelectLabel} on:close={() => clearSelection()} />
 </div>
-
-<!--
-TODO:
-- ラベルが重なった時にレイヤーを分ける
-- 行間を変える
--->
