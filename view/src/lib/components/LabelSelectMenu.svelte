@@ -3,7 +3,6 @@
   import { Button } from "flowbite-svelte";
   import type { Label } from "$lib/types";
 
-  export let show: boolean = false;
   export let labels: Label[] = []
   export let top: number | null = null;
   export let left: number | null = null;
@@ -15,17 +14,15 @@
   }
 </script>
 
-{#if show}
-  <div class="fixed bg-white my-2 z-20 border rounded shadow flex justify-between items-start" style={modalStyle}>
-    <div class="flex flex-col">
-      {#each labels as label}
-        <Button
-          color="alternative"
-          size="sm"
-          btnClass="border-none py-2 px-4 w-full hover:bg-slate-100 text-left"
-          on:click={() => dispatchLabel(label)}>{label.name}
-        </Button>
-      {/each}
-    </div>
+<div class="fixed bg-white my-2 z-20 border rounded shadow flex justify-between items-start" style={modalStyle}>
+  <div class="flex flex-col">
+    {#each labels as label}
+      <Button
+        color="alternative"
+        size="sm"
+        btnClass="border-none py-2 px-4 w-full hover:bg-slate-100 text-left"
+        on:click={() => dispatchLabel(label)}>{label.name}
+      </Button>
+    {/each}
   </div>
-{/if}
+</div>

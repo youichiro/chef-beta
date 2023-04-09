@@ -2,7 +2,7 @@
   import LabelSelectMenu from "$lib/components/LabelSelectMenu.svelte";
   import { getAnnotationTags, isOverlappingAnnotations } from "$lib/models/annotation";
   import { maxLabelNameLength } from "$lib/models/label";
-  import type { RangeIndex, Label, Annotation, Span } from "$lib/types";
+  import type { RangeIndex, Label, Annotation, Span, LabelSelectMenuOffset } from "$lib/types";
   import { onMount } from "svelte";
 
   export let text: string;
@@ -11,7 +11,8 @@
   const textMarginRight = maxLabelNameLength(labels)
   let annotations: Annotation[] = []
   let selectedRangeIndex: RangeIndex | null = null;
-  let menu: any = { show: false, top: null, left: null }
+  let menu: LabelSelectMenuOffset | null = null;
+
   $: spans = splitText(text, annotations)
   $: tags = getAnnotationTags(annotations)
 
@@ -39,7 +40,7 @@
 
   const clearSelection = () => {
     selectedRangeIndex = null;
-    menu = { show: false, top: null, left: null };
+    menu = null;
   }
 
   const handleMouseUp = () => {
@@ -63,7 +64,7 @@
     const rects = range.getClientRects()
     const firstRect = rects[0]
     selectedRangeIndex = rangeIndex;
-    menu = { show: true, top: firstRect.bottom, left: firstRect.left}
+    menu = {top: firstRect.bottom, left: firstRect.left }
   }
 
   const onSelectLabel = (event: CustomEvent) => {
@@ -109,5 +110,7 @@
       {/if}
     </svg>
   </div>
-  <LabelSelectMenu show={menu.show} labels={labels} top={menu.top} left={menu.left} on:select={onSelectLabel} on:close={() => clearSelection()} />
+  {#if menu !== null}
+    <LabelSelectMenu labels={labels} top={menu?.top} left={menu?.left} on:select={onSelectLabel} on:close={() => clearSelection()} />
+  {/if}
 </div>

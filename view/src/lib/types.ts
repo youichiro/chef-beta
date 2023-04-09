@@ -26,3 +26,8 @@ export type AnnotationTag = {
   y: number,
   label: Label,
 }
+
+export type LabelSelectMenuOffset = {
+  top: number,
+  left: number,
+}
