@@ -1,15 +1,13 @@
 <script lang="ts">
   import LabelSelectMenu from "$lib/components/LabelSelectMenu.svelte";
-  import type { RangeIndex } from "$lib/types";
+  import { maxLabelNameLength } from "$lib/models/label";
+  import type { RangeIndex, Label } from "$lib/types";
   import { onMount } from "svelte";
 
-  const text = "私は小川耀一朗です 私は小川耀一朗です 私は小川耀一朗です 私は小川耀一朗です 私は小川耀一朗です 私は小川耀一朗です 私は小川耀一朗です 私は小川耀一朗です 私は小川耀一朗です 私は小川耀一朗です 私は小川耀一朗です 私は小川耀一朗です"
-  const labels = [
-    { name: "名前", color: "green-500" },
-    { name: "メールアドレス", color: "orange-500" },
-    { name: "住所", color: "blue-500" },
-  ]
-  const maxLabelNameLength = Math.max(...labels.map(label => label.name.length))
+  export let text: string;
+  export let labels: Label[];
+
+  const textMarginRight = maxLabelNameLength(labels)
   let annotations: any[] = []
   let selectedRangeIndex: RangeIndex | null = null;
   let menu: any = { show: false, top: null, left: null }
@@ -137,7 +135,7 @@
   <div class="bg-white p-4 border rounded" on:mouseup={handleMouseUp}>
     <svg id="svg" class="w-full h-full">
       <foreignObject width="100%" height="100%">
-        <p id="text" style={`margin-right: ${maxLabelNameLength}em; line-height: 3em;`} class="text-lg">
+        <p id="text" style={`margin-right: ${textMarginRight}em; line-height: 3em;`} class="text-lg">
           {#each chars as char}
             <span class={char.className}>{char.text}</span>
           {/each}
