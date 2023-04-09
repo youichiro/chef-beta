@@ -9,15 +9,14 @@ export type RangeIndex = {
 }
 
 export type Annotation = {
-  text: string;
-  rangeIndex: RangeIndex;
-  rects: DOMRectList;
-  category: string;
-  color: string;
-};
+  label: Label,
+  rangeIndex: RangeIndex,
+}
 
-export type Char = {
+export type Span = {
   text: string,
-  style: string,
-  categoryName: string,
+  index: number,
+  class: string,
+  annotation?: Annotation,
+  showLabel?: boolean,
 }

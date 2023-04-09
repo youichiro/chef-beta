@@ -1,22 +1,22 @@
 <script lang="ts">
   import LabelSelectMenu from "$lib/components/LabelSelectMenu.svelte";
   import { maxLabelNameLength } from "$lib/models/label";
-  import type { RangeIndex, Label } from "$lib/types";
+  import type { RangeIndex, Label, Annotation, Span } from "$lib/types";
   import { onMount } from "svelte";
 
   export let text: string;
   export let labels: Label[];
 
   const textMarginRight = maxLabelNameLength(labels)
-  let annotations: any[] = []
+  let annotations: Annotation[] = []
   let selectedRangeIndex: RangeIndex | null = null;
   let menu: any = { show: false, top: null, left: null }
-  $: chars = splitText(text, annotations)
+  $: spans = splitText(text, annotations)
   $: tags = getTags(annotations)
 
-  const splitText = (text: string, annotations: any[]) => {
+  const splitText = (text: string, annotations: Annotation[]): Span[] => {
     return text.split("").map((char, index) => {
-      const span = { text: char, index: index, className: `span${index}` }
+      const span: Span = { text: char, index: index, class: `span${index}` }
       if (!annotations || annotations.length === 0) {
         return span
       }
@@ -29,14 +29,14 @@
       return {
         text: char,
         index: index,
-        className: `span${index} border-b-2 border-${matchAnnotation.label.color}`,
+        class: `span${index} border-b-2 border-${matchAnnotation.label.color}`,
         annotation: matchAnnotation,
         showLabel,
       }
     })
   }
 
-  const getTags = (annotations: any[]) => {
+  const getTags = (annotations: Annotation[]) => {
     // アノテーションからタグの位置を計算して返す
     if (!annotations || annotations.length === 0) {
       return []
@@ -108,7 +108,7 @@
   const onSelectLabel = (event: CustomEvent) => {
     const label = event.detail.label;
     if (selectedRangeIndex !== null) {
-      const newAnnotation = { label, rangeIndex: selectedRangeIndex };
+      const newAnnotation: Annotation = { label, rangeIndex: selectedRangeIndex };
       annotations = [...annotations, newAnnotation];
     }
     clearSelection()
@@ -136,8 +136,8 @@
     <svg id="svg" class="w-full h-full">
       <foreignObject width="100%" height="100%">
         <p id="text" style={`margin-right: ${textMarginRight}em; line-height: 3em;`} class="text-lg">
-          {#each chars as char}
-            <span class={char.className}>{char.text}</span>
+          {#each spans as span}
+            <span class={span.class}>{span.text}</span>
           {/each}
         </p>
       </foreignObject>
