@@ -99,13 +99,11 @@
           {/each}
         </p>
       </foreignObject>
-      {#if tags.length > 0}
-        {#each tags as tag}
-          <text x={tag.x} y={tag.y} class={`select-none text-sm font-bold fill-${tag.label.color}`}
-            >{tag.label.name}</text
-          >
-        {/each}
-      {/if}
+      {#each tags as tag}
+        <text x={tag.x} y={tag.y} class={`select-none text-sm font-bold fill-${tag.label.color}`}
+          >{tag.label.name}</text
+        >
+      {/each}
     </svg>
   </div>
   {#if menu !== null}
