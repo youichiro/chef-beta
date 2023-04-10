@@ -1,5 +1,5 @@
 <script lang="ts">
-  import LabelSelectMenu from "$lib/components/LabelSelectMenu.svelte";
+  import LabelSelectMenu from "$lib/components/annotations/LabelSelectMenu.svelte";
   import { getAnnotationTags, getMatchAnnotation, isOverlappingAnnotations } from "$lib/models/annotation";
   import { maxLabelNameLength } from "$lib/models/label";
   import type { RangeIndex, Label, Annotation, Span, LabelSelectMenuOffset } from "$lib/types";
