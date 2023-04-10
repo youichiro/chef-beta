@@ -3,7 +3,9 @@
   import { getAnnotationTags, getMatchAnnotation, isOverlappingAnnotations } from "$lib/models/annotation";
   import { maxLabelNameLength } from "$lib/models/label";
   import type { RangeIndex, Label, Annotation, Span, LabelSelectMenuOffset } from "$lib/types";
+  import { Tooltip } from "flowbite-svelte";
   import { onMount } from "svelte";
+  import { ArrowPath } from "svelte-heros-v2";
 
   export let text: string;
   export let labels: Label[];
@@ -95,7 +97,30 @@
     }
     // @ts-ignore
     const annotationId: number = Number(event.target.dataset.value);
+    // remove annotation
     annotations = [...annotations.filter(annotation => annotation.id !== annotationId)]
+  }
+
+  const resetAnnotatoins = () => {
+    if (annotations.length === 0) {
+      return;
+    }
+    if (window.confirm("reset annotations.")) {
+      annotations = [];
+    }
+  }
+
+  const handleClickReset = () => {
+    resetAnnotatoins()
+  }
+
+  const handleWindowKeyDown = (event: KeyboardEvent) => {
+    const key = event.key
+    switch (key) {
+      case 'c':
+        resetAnnotatoins()
+        break;
+    }
   }
 </script>
 
@@ -121,6 +146,10 @@
         </text>
       {/each}
     </svg>
+    <div class="flex justify-end">
+      <ArrowPath color="gray" on:click={handleClickReset} />
+      <Tooltip>type "c" to reset all annotation.</Tooltip>
+    </div>
   </div>
   {#if menu !== null}
     <LabelSelectMenu
@@ -132,3 +161,9 @@
     />
   {/if}
 </div>
+
+<svelte:window on:keydown={handleWindowKeyDown} />
+
+<!--
+TODO: ラベルを選択したら、backspaceで削除できることをガイドしたい
+-->
