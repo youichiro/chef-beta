@@ -82,7 +82,8 @@
   const onSelectLabel = (event: CustomEvent) => {
     const label = event.detail.label;
     if (selectedRangeIndex !== null) {
-      const newAnnotation: Annotation = { label, rangeIndex: selectedRangeIndex };
+      const id = annotations.length === 0 ? 0 : Math.max(...(annotations.map(annotation => annotation.id))) + 1
+      const newAnnotation: Annotation = { id, label, rangeIndex: selectedRangeIndex };
       annotations = [...annotations, newAnnotation];
     }
     clearSelection();
@@ -92,7 +93,9 @@
     if (event.key !== 'Backspace') {
       return
     }
-    alert('delete');
+    // @ts-ignore
+    const annotationId: number = Number(event.target.dataset.value);
+    annotations = [...annotations.filter(annotation => annotation.id !== annotationId)]
   }
 </script>
 
@@ -113,8 +116,8 @@
         </p>
       </foreignObject>
       {#each tags as tag}
-        <text x={tag.x} y={tag.y} class={`select-none cursor-pointer text-sm font-bold fill-${tag.label.color}`} tabIndex="0" on:keydown={handleKeyDownTag}>
-          {tag.label.name}
+        <text x={tag.x} y={tag.y} data-value={tag.annotation.id} class={`select-none cursor-pointer text-sm font-bold fill-${tag.annotation.label.color}`} tabIndex="0" on:keydown={handleKeyDownTag}>
+          {tag.annotation.label.name}
         </text>
       {/each}
     </svg>

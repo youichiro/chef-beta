@@ -9,6 +9,7 @@ export type RangeIndex = {
 };
 
 export type Annotation = {
+  id: number;
   label: Label;
   rangeIndex: RangeIndex;
 };
@@ -19,10 +20,10 @@ export type Span = {
   class: string;
 };
 
-export type AnnotationTag = {
+export type Tag = {
   x: number;
   y: number;
-  label: Label;
+  annotation: Annotation;
 };
 
 export type LabelSelectMenuOffset = {

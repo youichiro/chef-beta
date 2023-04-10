@@ -1,7 +1,7 @@
-import type { Annotation, AnnotationTag, RangeIndex } from "$lib/types";
+import type { Annotation, Tag, RangeIndex } from "$lib/types";
 import { nonNullable } from "$lib/utils";
 
-export const getAnnotationTags = (annotations: Annotation[]): AnnotationTag[] => {
+export const getAnnotationTags = (annotations: Annotation[]): Tag[] => {
   // アノテーションからタグの位置を計算して返す
   if (annotations.length === 0) {
     return [];
@@ -14,7 +14,7 @@ export const getAnnotationTags = (annotations: Annotation[]): AnnotationTag[] =>
         return null;
       }
       const spanElm = spanElms[0];
-      const tag: AnnotationTag = { x: spanElm.offsetLeft, y: spanElm.offsetTop + 40, label: annotation.label };
+      const tag: Tag = { x: spanElm.offsetLeft, y: spanElm.offsetTop + 40, annotation: annotation };
       return tag;
     })
     .filter(nonNullable);
