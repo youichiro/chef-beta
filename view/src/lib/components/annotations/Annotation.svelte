@@ -88,17 +88,11 @@
     clearSelection();
   };
 
-  const handleClickTag = () => {
-    console.log('handleClickTag')
-    alert('hoge');
-    window.getSelection()?.removeAllRanges();
-  }
-
   const handleKeyDownTag = (event: KeyboardEvent) => {
-    if (event.key === 'Enter') {
-      handleClickTag();
+    if (event.key !== 'Backspace') {
+      return
     }
-    window.getSelection()?.removeAllRanges();
+    alert('delete');
   }
 </script>
 
@@ -119,7 +113,7 @@
         </p>
       </foreignObject>
       {#each tags as tag}
-        <text x={tag.x} y={tag.y} class={`select-none text-sm font-bold fill-${tag.label.color}`} on:click={handleClickTag} tabIndex="0" on:keydown={handleKeyDownTag}>
+        <text x={tag.x} y={tag.y} class={`select-none cursor-pointer text-sm font-bold fill-${tag.label.color}`} tabIndex="0" on:keydown={handleKeyDownTag}>
           {tag.label.name}
         </text>
       {/each}
