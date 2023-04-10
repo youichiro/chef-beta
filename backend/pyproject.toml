@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "chef-api"
+name = "chef-backend"
 version = "0.1.0"
 description = ""
 authors = ["youichiro <cinnamon416@gmail.com>"]
