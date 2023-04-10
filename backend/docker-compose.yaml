@@ -15,7 +15,7 @@ services:
       MYSQL_PORT: ${MYSQL_PORT}
       MYSQL_TEST_DATABASE: ${MYSQL_TEST_DATABASE}
     volumes:
-      - ./app:/opt/chef_api/app/
+      - ./app:/opt/chef_backend/app/
     ports:
       - "8000:8000"
     depends_on:
