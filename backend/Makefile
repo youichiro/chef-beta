@@ -17,3 +17,6 @@ clear_cache_files:
 	find . | grep -E __pycache__ | xargs rm -rf
 	find . | grep -E .pytest_cache | xargs rm -rf
 	find . | grep -E .mypy_cache | xargs rm -rf
+
+import_seeds:
+	mysql -h ${MYSQL_HOST} -P ${MYSQL_PORT} -u root -p${MYSQL_ROOT_PASSWORD} ${MYSQL_DATABASE} < db/seeds.sql
