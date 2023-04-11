@@ -13,7 +13,7 @@ allow_origins = ["http://localhost:5173"]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allow_origins,
-    allow_credentials=False,  # cookieをサポートするか
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
