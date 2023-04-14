@@ -20,11 +20,11 @@ engine = create_engine(sqlalchemy_database_url)
 
 def override_get_db():
     SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-    session = SessionLocal()
+    db = SessionLocal()
     try:
-        yield session
+        yield db
     finally:
-        session.close()
+        db.close()
 
 
 @pytest.fixture(scope="session")
