@@ -3,9 +3,23 @@
   import { page } from "$app/stores";
   import { Drawer, Sidebar, SidebarGroup, SidebarItem, SidebarWrapper } from "flowbite-svelte";
   import { Home, ChartBar, Cog, QuestionMarkCircle, Folder } from "svelte-heros-v2";
+  import type { SvelteComponent } from "svelte";
 
   $: activeUrl = $page.url.pathname;
   let activateClickOutside = false;
+
+  type Item = {
+    label: string;
+    url: string,
+    icon: typeof SvelteComponent;
+  }
+
+  const items: Item[] = [
+    { label: "Home", url: "/", icon: Home },
+    { label: "Projects", url: "/projects", icon: Folder },
+    { label: "Dashboard", url: "/", icon: ChartBar },
+    { label: "Setting", url: "/", icon: Cog },
+  ]
 
   const styles = {
     sidebarItem: {
@@ -28,44 +42,21 @@
     <SidebarWrapper divClass="overflow-y-auto py-4">
       <SidebarGroup ulClass="">
         <SidebarItem label="LOGO" />
-        <SidebarItem
-          label="Home"
-          href="/"
-          active={activeUrl === "/"}
-          aClass={styles.sidebarItem.base}
-          activeClass={styles.sidebarItem.active}
-        >
-          <svelte:fragment slot="icon">
-            <Home />
-          </svelte:fragment>
-        </SidebarItem>
-        <SidebarItem
-          label="Projects"
-          href="/projects"
-          active={activeUrl.startsWith("/projects")}
-          aClass={styles.sidebarItem.base}
-          activeClass={styles.sidebarItem.active}
-        >
-          <svelte:fragment slot="icon">
-            <Folder />
-          </svelte:fragment>
-        </SidebarItem>
-        <SidebarItem
-          label="Dashboard"
-          href="/"
-          aClass={styles.sidebarItem.base}
-          activeClass={styles.sidebarItem.active}
-        >
-          <svelte:fragment slot="icon">
-            <ChartBar />
-          </svelte:fragment>
-        </SidebarItem>
-        <SidebarItem label="Setting" href="/" aClass={styles.sidebarItem.base} activeClass={styles.sidebarItem.active}>
-          <svelte:fragment slot="icon">
-            <Cog />
-          </svelte:fragment>
-        </SidebarItem>
+        {#each items as item}
+          <SidebarItem
+            label={item.label}
+            href={item.url}
+            active={activeUrl === item.url}
+            aClass={styles.sidebarItem.base}
+            activeClass={styles.sidebarItem.active}
+          >
+            <svelte:fragment slot="icon">
+              <svelte:component this={item.icon} />
+            </svelte:fragment>
+          </SidebarItem>
+        {/each}
       </SidebarGroup>
+
       <SidebarGroup border ulClass="">
         <SidebarItem label="Help" href="/" aClass={styles.sidebarItem.base}>
           <svelte:fragment slot="icon">
