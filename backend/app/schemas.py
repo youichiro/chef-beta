@@ -1,6 +1,7 @@
 from pydantic import BaseModel, Field
 
 class ProjectType(BaseModel):
+    id: int = Field(example=1)
     name: str = Field(example="tagging")
 
     class Config:
