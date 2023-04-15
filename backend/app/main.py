@@ -31,10 +31,19 @@ api_router = APIRouter(prefix="/api")
     "/projects",
     status_code=200,
     response_model=Page[schemas.Project],
-    responses={404: {"description": "Not found project"}},
 )
 def get_projects(db: Session = Depends(get_db)):
     query = select(models.Project)
+    return paginate(db, query)
+
+
+@api_router.get(
+    "/users",
+    status_code=200,
+    response_model=Page[schemas.User],
+)
+def get_users(db: Session = Depends(get_db)):
+    query = select(models.User)
     return paginate(db, query)
 
 

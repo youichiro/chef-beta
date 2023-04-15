@@ -14,3 +14,10 @@ class Project(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class User(BaseModel):
+    name: str = Field(example="user name")
+
+    class Config:
+        orm_mode = True
