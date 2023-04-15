@@ -2,6 +2,7 @@
   import { PaginationItem, ChevronLeft, ChevronRight } from "flowbite-svelte";
   import { ChevronDoubleLeft, ChevronDoubleRight } from "svelte-heros-v2";
 
+  export let baseUrl: string;
   export let currentPage: number;
   export let lastPage: number;
 
@@ -10,20 +11,20 @@
   const nextPage = currentPage + 1 <= lastPage ? currentPage + 1 : null;
 
   const handleClickFirst = () => {
-    window.location.href = `/projects?page=${firstPage}`;
+    window.location.href = `${baseUrl}?page=${firstPage}`;
   };
   const handleClickPrevious = () => {
     if (previousPage !== null) {
-      window.location.href = `/projects?page=${previousPage}`;
+      window.location.href = `${baseUrl}?page=${previousPage}`;
     }
   };
   const handleClickNext = () => {
     if (nextPage !== null) {
-      window.location.href = `/projects?page=${nextPage}`;
+      window.location.href = `${baseUrl}?page=${nextPage}`;
     }
   };
   const handleClickLast = () => {
-    window.location.href = `/projects?page=${lastPage}`;
+    window.location.href = `${baseUrl}?page=${lastPage}`;
   };
 
   const styles = {

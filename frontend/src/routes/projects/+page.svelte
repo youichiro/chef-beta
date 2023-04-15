@@ -2,7 +2,7 @@
   import PageTop from "$lib/components/PageTop.svelte";
   import ProjectTable from "$lib/components/projects/ProjectTable.svelte";
   import { Spinner } from "flowbite-svelte";
-  import ProjectTablePagination from "$lib/components/projects/ProjectTablePagination.svelte";
+  import ProjectTablePagination from "$lib/components/common/Pagination.svelte";
   import type { PageData } from "./$types";
   import { ProjectListResponse } from "$lib/types/project-types";
 
@@ -32,7 +32,7 @@
       <p>items empty.</p>
     {:else}
       <ProjectTable projects={ProjectListResponse.parse(response).items} />
-      <ProjectTablePagination currentPage={data.page} lastPage={ProjectListResponse.parse(response).pages} />
+      <ProjectTablePagination baseUrl="/projects" currentPage={data.page} lastPage={ProjectListResponse.parse(response).pages} />
     {/if}
   {:catch error}
     <p>error! {error}</p>
