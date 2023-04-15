@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from "flowbite-svelte";
+  import { A, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from "flowbite-svelte";
   import type { Project } from "$lib/types/project-types";
 
   export let projects: Project[];
@@ -16,7 +16,7 @@
       {#each projects as project (project.id)}
         <TableBodyRow>
           <TableBodyCell>{project.id}</TableBodyCell>
-          <TableBodyCell>{project.name}</TableBodyCell>
+          <TableBodyCell><A href="/projects">{project.name}</A></TableBodyCell>
           <TableBodyCell>{project.project_type.name}</TableBodyCell>
         </TableBodyRow>
       {/each}
