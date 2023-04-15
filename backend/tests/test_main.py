@@ -29,6 +29,18 @@ def test_get_projects(client, db):
     assert items[1].project_type.name == 'classification'
 
 
+def test_get_project_detail(client, db):
+    project_type = models.ProjectType(name="classification")
+    db.add(project_type)
+    db.flush()
+    project = models.Project(project_type_id=project_type.id, name="demo project")
+    db.add(project)
+    db.commit()
+
+    response = client.get("/api/projects/1")
+    assert response.status_code == 200
+
+
 def test_get_members(client, db):
     user1 = models.User(name="user1")
     user2 = models.User(name="user2")

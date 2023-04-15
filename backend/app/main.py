@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, FastAPI
+from fastapi import APIRouter, Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi_pagination import Page, add_pagination
 from fastapi_pagination.ext.sqlalchemy_future import paginate
@@ -35,6 +35,23 @@ api_router = APIRouter(prefix="/api")
 def get_projects(db: Session = Depends(get_db)):
     query = select(models.Project)
     return paginate(db, query)
+
+
+@api_router.get(
+    "/projects/{project_id}",
+    status_code=200,
+    response_model=schemas.ProjectDetail,
+    responses={
+        404: {"description": "Project not found"},
+    },
+)
+def get_project_detail(project_id: int, db: Session = Depends(get_db)):
+    query = select(models.Project).where(models.Project.id == project_id)
+    project = db.scalars(query).one_or_none()
+    if project is None:
+        raise HTTPException(status_code=404, detail=f"Project not found. project_id: {project_id}")
+
+    return project
 
 
 @api_router.get(

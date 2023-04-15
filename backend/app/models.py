@@ -39,7 +39,7 @@ class Project(Base):
 
     project_type = relationship("ProjectType", back_populates="projects")
     project_members = relationship("ProjectMember", back_populates="project")
-    guideline = relationship("Guideline", back_populates="project")
+    guideline = relationship("Guideline", back_populates="project", uselist=False)
     datasets = relationship("Dataset", back_populates="project")
 
 
