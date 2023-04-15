@@ -1,7 +1,12 @@
 <script lang="ts">
   import { Breadcrumb, BreadcrumbItem } from "flowbite-svelte";
 
-  export let pages: string[] = [];
+  type Page = {
+    name: string,
+    url: string,
+  }
+
+  export let pages: Page[] = [];
   export let title: string;
 </script>
 
@@ -10,7 +15,7 @@
     <Breadcrumb>
       <BreadcrumbItem home href="/" />
       {#each pages as page}
-        <BreadcrumbItem>{page}</BreadcrumbItem>
+        <BreadcrumbItem href={page.url}>{page.name}</BreadcrumbItem>
       {/each}
     </Breadcrumb>
   {/if}

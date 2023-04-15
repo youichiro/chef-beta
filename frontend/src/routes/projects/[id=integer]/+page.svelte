@@ -18,7 +18,7 @@
   let promise = getProjectDetail();
 </script>
 
-<PageTop title="Project Detail" />
+<PageTop title="Project Detail" pages={[{name: 'projects', url: '/projects'}]} />
 
 <div>
   {#await promise}
