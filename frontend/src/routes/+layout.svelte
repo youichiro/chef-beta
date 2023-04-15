@@ -2,7 +2,7 @@
   import "../app.postcss";
   import { page } from "$app/stores";
   import { Drawer, Sidebar, SidebarGroup, SidebarItem, SidebarWrapper } from "flowbite-svelte";
-  import { Home, ChartBar, Cog, QuestionMarkCircle, Folder } from "svelte-heros-v2";
+  import { Home, ChartBar, Cog, QuestionMarkCircle, Folder, Users } from "svelte-heros-v2";
   import type { SvelteComponent } from "svelte";
 
   $: activeUrl = $page.url.pathname;
@@ -17,6 +17,7 @@
   const items: Item[] = [
     { label: "Home", url: "/", icon: Home },
     { label: "Projects", url: "/projects", icon: Folder },
+    { label: "Members", url: "/members", icon: Users },
     { label: "Dashboard", url: "/", icon: ChartBar },
     { label: "Setting", url: "/", icon: Cog },
   ]
