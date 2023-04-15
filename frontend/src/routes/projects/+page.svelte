@@ -4,9 +4,11 @@
   import { Spinner } from "flowbite-svelte";
   import ProjectTablePagination from "$lib/components/common/Pagination.svelte";
   import type { PageData } from "./$types";
-  import { ProjectList } from "$lib/types/project-types";
+  import { ProjectListSchema } from "$lib/types/project-types";
+  import type { ProjectList } from "$lib/types/project-types";
 
   export let data: PageData;
+  let projectList: ProjectList;
 
   const getProjects = async () => {
     const response = await self.fetch(`http://localhost:8000/api/projects?page=${data.page}&size=3`);
@@ -17,7 +19,9 @@
     }
   };
 
-  let promise = getProjects();
+  let promise = getProjects().then(response => {
+    projectList = ProjectListSchema.parse(response);
+  });
 </script>
 
 <PageTop title="Projects" />
@@ -27,12 +31,12 @@
     <div class="text-center mt-8">
       <Spinner />
     </div>
-  {:then response}
-    {#if response.items.length === 0}
+  {:then}
+    {#if projectList.items.length === 0}
       <p>items empty.</p>
     {:else}
-      <ProjectTable projects={ProjectList.parse(response).items} />
-      <ProjectTablePagination baseUrl="/projects" currentPage={data.page} lastPage={ProjectList.parse(response).pages} />
+      <ProjectTable projects={projectList.items} />
+      <ProjectTablePagination baseUrl="/projects" currentPage={data.page} lastPage={projectList.pages} />
     {/if}
   {:catch error}
     <p>error! {error}</p>

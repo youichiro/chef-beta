@@ -11,13 +11,15 @@ export const Project = z.object({
 
 export type Project = z.infer<typeof Project>;
 
-export const ProjectList = z.object({
+export const ProjectListSchema = z.object({
   items: Project.array(),
   total: z.number(),
   page: z.number(),
   size: z.number(),
   pages: z.number(),
 });
+
+export type ProjectList = z.infer<typeof ProjectListSchema>;
 
 export const Guideline = z.object({
   id: z.number(),
