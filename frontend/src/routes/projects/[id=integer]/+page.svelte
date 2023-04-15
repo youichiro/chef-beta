@@ -5,6 +5,7 @@
   import { ProjectDetailSchema } from "$lib/types/project-types";
   import type { ProjectDetail } from "$lib/types/project-types";
   import { Tabs, TabItem } from 'flowbite-svelte';
+  import DatasetTable from "$lib/components/datasets/DatasetTable.svelte";
 
   export let data: PageData;
   let projectDetail: ProjectDetail;
@@ -33,7 +34,7 @@
   {:then}
     <Tabs style="underline">
       <TabItem open title="Datasets">
-        <p>datasets</p>
+        <DatasetTable datasets={projectDetail.datasets} />
       </TabItem>
       <TabItem title="Guideline">
         <p>{projectDetail.guideline?.content}</p>

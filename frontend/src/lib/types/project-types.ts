@@ -24,10 +24,12 @@ export const Guideline = z.object({
   content: z.string(),
 })
 
-export const Dataset = z.object({
+export const DatasetSchema = z.object({
   id: z.number(),
   name: z.string(),
 })
+
+export type Dataset = z.infer<typeof DatasetSchema>;
 
 export const ProjectDetailSchema = z.object({
   id: z.number(),
@@ -36,7 +38,7 @@ export const ProjectDetailSchema = z.object({
     name: z.string(),
   }),
   guideline: Guideline.optional(),
-  datasets: Dataset.array(),
+  datasets: DatasetSchema.array(),
 })
 
 export type ProjectDetail = z.infer<typeof ProjectDetailSchema>;
