@@ -2,9 +2,12 @@
   import type { PageData } from "./$types";
   import PageTop from "$lib/components/PageTop.svelte";
   import { Spinner } from "flowbite-svelte";
-  import { ProjectDeatil } from "$lib/types/project-types";
+  import { ProjectDetailSchema } from "$lib/types/project-types";
+  import type { ProjectDetail } from "$lib/types/project-types";
+  import { Tabs, TabItem } from 'flowbite-svelte';
 
   export let data: PageData;
+  let projectDetail: ProjectDetail;
 
   const getProjectDetail = async () => {
     const response = await self.fetch(`http://localhost:8000/api/projects/${data.id}`);
@@ -15,7 +18,9 @@
     }
   };
 
-  let promise = getProjectDetail();
+  let promise = getProjectDetail().then(response => {
+    projectDetail = ProjectDetailSchema.parse(response);
+  });
 </script>
 
 <PageTop title="Project Detail" pages={[{name: 'projects', url: '/projects'}]} />
@@ -25,8 +30,18 @@
     <div class="text-center mt-8">
       <Spinner />
     </div>
-  {:then response}
-    {ProjectDeatil.parse(response)}
+  {:then}
+    <Tabs style="underline">
+      <TabItem open title="Datasets">
+        <p>datasets</p>
+      </TabItem>
+      <TabItem title="Guideline">
+        <p>{projectDetail.guideline?.content}</p>
+      </TabItem>
+      <TabItem title="Members">
+        <p>members</p>
+      </TabItem>
+    </Tabs>
   {:catch error}
     <p>error! {error}</p>
   {/await}

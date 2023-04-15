@@ -29,7 +29,7 @@ export const Dataset = z.object({
   name: z.string(),
 })
 
-export const ProjectDeatil = z.object({
+export const ProjectDetailSchema = z.object({
   id: z.number(),
   name: z.string(),
   project_type: z.object({
@@ -38,3 +38,5 @@ export const ProjectDeatil = z.object({
   guideline: Guideline.optional(),
   datasets: Dataset.array(),
 })
+
+export type ProjectDetail = z.infer<typeof ProjectDetailSchema>;
