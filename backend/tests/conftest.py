@@ -31,7 +31,7 @@ def override_get_db():
 def app():
     main.app.dependency_overrides[get_db] = override_get_db
     models.Base.metadata.create_all(bind=engine)
-    yield main.app
+    yield
     models.Base.metadata.drop_all(bind=engine)
 
 
@@ -41,5 +41,13 @@ def init_app(app):
 
 
 @pytest.fixture
-def client(app):
-    return TestClient(app)
+def db():
+    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    db = SessionLocal()
+    yield db
+    db.close()
+
+
+@pytest.fixture
+def client():
+    return TestClient(main.app)
