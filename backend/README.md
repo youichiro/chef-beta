@@ -23,6 +23,12 @@ run fastapi server
 make run_fastapi
 ```
 
+## Testing
+run test in parallel
+```sh
+make test
+```
+
 
 ## Migration
 ```sh
