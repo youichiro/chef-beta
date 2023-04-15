@@ -16,7 +16,8 @@ class Project(BaseModel):
         orm_mode = True
 
 
-class User(BaseModel):
+class Member(BaseModel):
+    id: int = Field(example=1)
     name: str = Field(example="user name")
 
     class Config:

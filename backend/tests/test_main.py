@@ -29,13 +29,13 @@ def test_get_projects(client, db):
     assert items[1].project_type.name == 'classification'
 
 
-def test_get_users(client, db):
+def test_get_members(client, db):
     user1 = models.User(name="user1")
     user2 = models.User(name="user2")
     db.add_all([user1, user2])
     db.commit()
 
-    response = client.get("/api/users")
+    response = client.get("/api/members")
     assert response.status_code == 200
 
     page = Page.parse_raw(response.content)
@@ -44,7 +44,7 @@ def test_get_users(client, db):
     assert page.size == 50
     assert page.pages == 1
 
-    items = [schemas.User.parse_obj(item) for item in page.items]
+    items = [schemas.Member.parse_obj(item) for item in page.items]
     assert len(items) == 2
     assert items[0].name == 'user1'
     assert items[1].name == 'user2'
