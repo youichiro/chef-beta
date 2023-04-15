@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { z } from "zod";
   import PageTop from "$lib/components/PageTop.svelte";
-  import Table from "$lib/components/Table.svelte";
+  import ProjectTable from "$lib/components/projects/ProjectTable.svelte";
   import { Spinner } from "flowbite-svelte";
-  import Pagination from "$lib/components/Pagination.svelte";
+  import ProjectTablePagination from "$lib/components/projects/ProjectTablePagination.svelte";
   import type { PageData } from "./$types";
+  import { ProjectListResponse } from "$lib/schemas";
 
   export let data: PageData;
 
@@ -16,19 +16,6 @@
       throw new Error(`status: ${response.status}, ${response.statusText}`);
     }
   };
-
-  const ResponseSchema = z.object({
-    items: z
-      .object({
-        id: z.number(),
-        name: z.string(),
-      })
-      .array(),
-    total: z.number(),
-    page: z.number(),
-    size: z.number(),
-    pages: z.number(),
-  });
 
   let promise = getProjects();
 </script>
@@ -44,8 +31,8 @@
     {#if response.items.length === 0}
       <p>items empty.</p>
     {:else}
-      <Table rows={ResponseSchema.parse(response).items} key="id" />
-      <Pagination currentPage={data.page} lastPage={ResponseSchema.parse(response).pages} />
+      <ProjectTable projects={ProjectListResponse.parse(response).items} />
+      <ProjectTablePagination currentPage={data.page} lastPage={ProjectListResponse.parse(response).pages} />
     {/if}
   {:catch error}
     <p>error! {error}</p>
