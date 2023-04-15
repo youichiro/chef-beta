@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from "flowbite-svelte";
-  import type { Dataset } from "$lib/types/project-types"
+  import type { Dataset } from "$lib/types/dataset-types"
 
   export let datasets: Dataset[];
 </script>
