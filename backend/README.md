@@ -12,11 +12,10 @@ curl -sSL https://install.python-poetry.org | python3 - --version 1.4.0
 poetry install
 ```
 
-setup databases
+setup local databases
 ```sh
 docker compose up -d db
 make setup_development_db
-make setup_test_db
 ```
 
 run fastapi server
@@ -56,6 +55,3 @@ poetry add --group dev xxx
 # add to test group
 poerty add --group test xxx
 ```
-
-## TODOs
-- GitHub Actions

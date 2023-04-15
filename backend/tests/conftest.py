@@ -9,20 +9,31 @@ from app import main, models
 from app.dependencies import get_db
 
 
-db_user = "root"
-db_password = os.environ["MYSQL_ROOT_PASSWORD"]
-db_host = os.environ["MYSQL_HOST"]
-db_port = os.environ["MYSQL_PORT"]
-db_name = os.environ["MYSQL_TEST_DATABASE"]
-sqlalchemy_database_url = f"mysql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
-engine = create_engine(sqlalchemy_database_url)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+def get_session(worker_id):
+    db_user = "root"
+    db_password = os.environ["MYSQL_ROOT_PASSWORD"]
+    db_host = os.environ["MYSQL_HOST"]
+    db_port = os.environ["MYSQL_PORT"]
+
+    db_names = {
+        "master": os.environ["MYSQL_TEST_DATABASE"],
+        "gw0": os.environ["MYSQL_TEST_DATABASE"],
+        "gw1": os.environ["MYSQL_TEST_DATABASE2"],
+    }
+    db_name = db_names[worker_id]
+
+    sqlalchemy_database_url = f"mysql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
+    engine = create_engine(sqlalchemy_database_url)
+    Session = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    session = Session()
+    return session, engine
 
 
 @pytest.fixture(scope="session")
-def app():
+def app(worker_id):
+    db, engine = get_session(worker_id)
+
     def override_get_db():
-        db = SessionLocal()
         try:
             yield db
         finally:
@@ -40,8 +51,8 @@ def init_app(app):
 
 
 @pytest.fixture
-def db():
-    db = SessionLocal()
+def db(worker_id):
+    db, _ = get_session(worker_id)
     try:
         yield db
         # delete tables
