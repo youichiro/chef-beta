@@ -16,19 +16,18 @@ db_port = os.environ["MYSQL_PORT"]
 db_name = os.environ["MYSQL_TEST_DATABASE"]
 sqlalchemy_database_url = f"mysql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
 engine = create_engine(sqlalchemy_database_url)
-
-
-def override_get_db():
-    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
 @pytest.fixture(scope="session")
 def app():
+    def override_get_db():
+        db = SessionLocal()
+        try:
+            yield db
+        finally:
+            db.close()
+
     main.app.dependency_overrides[get_db] = override_get_db
     models.Base.metadata.create_all(bind=engine)
     yield
@@ -42,10 +41,15 @@ def init_app(app):
 
 @pytest.fixture
 def db():
-    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
     db = SessionLocal()
-    yield db
-    db.close()
+    try:
+        yield db
+        # delete tables
+        for table in reversed(models.Base.metadata.sorted_tables):
+            db.execute(table.delete())
+        db.commit()
+    finally:
+        db.close()
 
 
 @pytest.fixture
