@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from "flowbite-svelte";
-  import type { Project } from "$lib/schemas";
+  import type { Project } from "$lib/types/project-types";
 
   export let projects: Project[];
 </script>

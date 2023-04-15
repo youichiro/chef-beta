@@ -4,7 +4,7 @@
   import { Spinner } from "flowbite-svelte";
   import ProjectTablePagination from "$lib/components/projects/ProjectTablePagination.svelte";
   import type { PageData } from "./$types";
-  import { ProjectListResponse } from "$lib/schemas";
+  import { ProjectListResponse } from "$lib/types/project-types";
 
   export let data: PageData;
 

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
   import { Button } from "flowbite-svelte";
-  import type { Label } from "$lib/types";
+  import type { Label } from "$lib/types/annotation-types";
 
   export let labels: Label[] = [];
   export let top: number | null = null;
