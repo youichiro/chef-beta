@@ -1,15 +1,9 @@
-from fastapi import APIRouter, Depends, FastAPI, HTTPException
+from fastapi import APIRouter, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi_pagination import Page, add_pagination
-from fastapi_pagination.ext.sqlalchemy_future import paginate
-from sqlalchemy import select
-from sqlalchemy.orm import Session
+from fastapi_pagination import add_pagination
 
-from app import models, schemas
-from app.dependencies import get_db
-from app.projects.router import router as projects_router
 from app.members.router import router as members_router
-
+from app.projects.router import router as projects_router
 
 app = FastAPI()
 allow_origins = ["http://localhost:5173"]

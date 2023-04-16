@@ -10,6 +10,9 @@ connect_db:
 test:
 	poetry run pytest -s -vv --cov --cov-report term-missing -n 2
 
+test-single:
+	poetry run pytest -s -vv --cov --cov-report term-missing
+
 lint:
 	poetry run isort .
 	poetry run black .

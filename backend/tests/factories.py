@@ -4,9 +4,7 @@ from app import models
 
 
 def create_project_type(db: Session, **kwargs):
-    project_type = models.ProjectType(
-        name=kwargs.get("name", "tagging")
-    )
+    project_type = models.ProjectType(name=kwargs.get("name", "tagging"))
     db.add(project_type)
     db.commit()
     return project_type
@@ -28,9 +26,7 @@ def create_project(db: Session, **kwargs):
 
 
 def create_user(db: Session, **kwargs):
-    user = models.User(
-        name=kwargs.get("name", "dummy user")
-    )
+    user = models.User(name=kwargs.get("name", "dummy user"))
     db.add(user)
     db.commit()
     return user
@@ -75,7 +71,7 @@ def create_project_member(db: Session, **kwargs):
     member_id = kwargs.get("member_id")
     if member_id is None:
         user = create_user(db)
-        user_id = user.id
+        member_id = user.id
 
     project_member = models.ProjectMember(
         project_id=project_id,

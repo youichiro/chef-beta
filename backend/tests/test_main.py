@@ -1,6 +1,6 @@
 from fastapi_pagination import Page
 
-from app import schemas, models
+from app import schemas
 from tests import factories
 
 
@@ -16,7 +16,7 @@ def test_get_members(client, db):
     response = client.get("/api/members")
     assert response.status_code == 200
 
-    page = Page.parse_raw(response.content)
+    page: Page = Page.parse_raw(response.content)
     assert page.total == 2
     assert page.page == 1
     assert page.size == 50
@@ -36,7 +36,7 @@ def test_get_projects(client, db):
     response = client.get("/api/projects")
     assert response.status_code == 200
 
-    page = Page.parse_raw(response.content)
+    page: Page = Page.parse_raw(response.content)
     assert page.total == 2
     assert page.page == 1
     assert page.size == 50
@@ -79,7 +79,7 @@ def test_get_dataset(client, db):
     response = client.get(f"/api/projects/{project.id}/datasets")
     assert response.status_code == 200
 
-    page = Page.parse_raw(response.content)
+    page: Page = Page.parse_raw(response.content)
     assert page.total == 2
     assert page.page == 1
     assert page.size == 50
@@ -101,7 +101,7 @@ def test_get_project_members(client, db):
     response = client.get(f"/api/projects/{project.id}/members")
     assert response.status_code == 200
 
-    page = Page.parse_raw(response.content)
+    page: Page = Page.parse_raw(response.content)
     assert page.total == 2
     assert page.page == 1
     assert page.size == 50
