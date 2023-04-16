@@ -7,11 +7,12 @@
   import { goto } from '$app/navigation';
   import { DatasetListSchema, type DatasetList, type Tab } from "$lib/types/dataset-types";
   import Pagination from "$lib/components/common/Pagination.svelte";
-  import { ProjectSchema, type Project } from "$lib/types/project-types";
+  import { ProjectSchema, type Project, Guideline, GuidelineSchema } from "$lib/types/project-types";
 
   export let data: PageData;
   let datasetList: DatasetList;
   let project: Project;
+  let guideline: Guideline;
 
   const getProject = async () => {
     const response = await self.fetch(`http://localhost:8000/api/projects/${data.id}`);
@@ -31,12 +32,24 @@
     }
   };
 
+  const getGuideline = async () => {
+    const response = await self.fetch(`http://localhost:8000/api/projects/${data.id}/guideline`)
+    if (response.ok) {
+      return response.json()
+    } else {
+      throw new Error(`status: ${response.status}, ${response.statusText}`);
+    }
+  }
+
   let promise = Promise.all([
     getProject().then(response => {
       project = ProjectSchema.parse(response);
     }),
     getDatasetList().then(response => {
       datasetList = DatasetListSchema.parse(response);
+    }),
+    getGuideline().then(response => {
+      guideline = GuidelineSchema.parse(response);
     })
   ]);
 
@@ -63,7 +76,7 @@
         <Pagination currentPage={data.page} lastPage={datasetList.pages} />
       </TabItem>
       <TabItem open={data.tab === "guideline"} title="Guideline" on:click={() => handleClickTab("guideline")}>
-        <p>guideline</p>
+        <div>{guideline.content}</div>
       </TabItem>
       <TabItem open={data.tab === "members"} title="Members" on:click={() => handleClickTab("members")}>
         <p>members</p>

@@ -26,3 +26,9 @@ export const Guideline = z.object({
   content: z.string(),
 })
 
+export const GuidelineSchema = z.object({
+  id: z.number(),
+  content: z.string(),
+})
+
+export type Guideline = z.infer<typeof GuidelineSchema>;
