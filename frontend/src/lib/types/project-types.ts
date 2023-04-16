@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { DatasetSchema } from "$lib/types/dataset-types";
 
 export const Project = z.object({
   id: z.number(),
@@ -27,14 +26,3 @@ export const Guideline = z.object({
   content: z.string(),
 })
 
-export const ProjectDetailSchema = z.object({
-  id: z.number(),
-  name: z.string(),
-  project_type: z.object({
-    name: z.string(),
-  }),
-  guideline: Guideline.optional(),
-  datasets: DatasetSchema.array(),
-})
-
-export type ProjectDetail = z.infer<typeof ProjectDetailSchema>;

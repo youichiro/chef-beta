@@ -2,18 +2,16 @@
   import type { PageData } from "./$types";
   import PageTop from "$lib/components/PageTop.svelte";
   import { Spinner } from "flowbite-svelte";
-  import { ProjectDetailSchema } from "$lib/types/project-types";
-  import type { ProjectDetail } from "$lib/types/project-types";
   import { Tabs, TabItem } from 'flowbite-svelte';
   import DatasetTable from "$lib/components/datasets/DatasetTable.svelte";
   import { goto } from '$app/navigation';
-  import type { Tab } from "$lib/types/dataset-types";
+  import { DatasetListSchema, type DatasetList, type Tab } from "$lib/types/dataset-types";
 
   export let data: PageData;
-  let projectDetail: ProjectDetail;
+  let datasets: DatasetList;
 
-  const getProjectDetail = async () => {
-    const response = await self.fetch(`http://localhost:8000/api/projects/${data.id}`);
+  const getDatasets = async () => {
+    const response = await self.fetch(`http://localhost:8000/api/projects/${data.id}/datasets`);
     if (response.ok) {
       return response.json();
     } else {
@@ -21,8 +19,8 @@
     }
   };
 
-  let promise = getProjectDetail().then(response => {
-    projectDetail = ProjectDetailSchema.parse(response);
+  let promise = getDatasets().then(response => {
+    datasets = DatasetListSchema.parse(response);
   });
 
   const handleClickTab = async (tab: Tab) => {
@@ -45,10 +43,10 @@
   {:then}
     <Tabs style="underline" defaultClass="flex flex-wrap space-x-2 bg-slate-50 pl-4" contentClass="">
       <TabItem open={data.tab === "datasets" || data.tab === null} title="Datasets" on:click={() => handleClickTab("datasets")}>
-        <DatasetTable datasets={projectDetail.datasets} />
+        <DatasetTable datasets={datasets.items} />
       </TabItem>
       <TabItem open={data.tab === "guideline"} title="Guideline" on:click={() => handleClickTab("guideline")}>
-        <p>{projectDetail.guideline?.content}</p>
+        <p>guideline</p>
       </TabItem>
       <TabItem open={data.tab === "members"} title="Members" on:click={() => handleClickTab("members")}>
         <p>members</p>
