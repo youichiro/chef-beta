@@ -4,6 +4,11 @@ from app import schemas, models
 from tests import factories
 
 
+def test_get_root(client):
+    response = client.get("/")
+    assert response.status_code == 200
+
+
 def test_get_members(client, db):
     user1 = factories.create_user(db, name="dummy user1")
     user2 = factories.create_user(db, name="dummy user2")
@@ -84,3 +89,27 @@ def test_get_dataset(client, db):
     assert len(items) == 2
     assert items[0].id == dataset1.id
     assert items[1].id == dataset2.id
+
+
+def test_get_project_members(client, db):
+    project = factories.create_project(db)
+    user1 = factories.create_user(db, name="user1")
+    user2 = factories.create_user(db, name="user2")
+    project_member1 = factories.create_project_member(db, project_id=project.id, member_id=user1.id)
+    project_member2 = factories.create_project_member(db, project_id=project.id, member_id=user2.id)
+
+    response = client.get(f"/api/projects/{project.id}/members")
+    assert response.status_code == 200
+
+    page = Page.parse_raw(response.content)
+    assert page.total == 2
+    assert page.page == 1
+    assert page.size == 50
+    assert page.pages == 1
+
+    items = [schemas.ProjectMember.parse_obj(item) for item in page.items]
+    assert len(items) == 2
+    assert items[0].id == project_member1.id
+    assert items[0].member.id == user1.id
+    assert items[1].id == project_member2.id
+    assert items[1].member.id == user2.id

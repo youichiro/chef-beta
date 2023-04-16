@@ -57,3 +57,11 @@ class Dataset(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class ProjectMember(BaseModel):
+    id: int = Field(example=1)
+    member: Member
+
+    class Config:
+        orm_mode = True

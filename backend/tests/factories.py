@@ -64,3 +64,23 @@ def create_guideline(db: Session, **kwargs):
     db.add(guideline)
     db.commit()
     return guideline
+
+
+def create_project_member(db: Session, **kwargs):
+    project_id = kwargs.get("project_id")
+    if project_id is None:
+        project = create_project(db, project_type_id=kwargs.get("project_type_id"))
+        project_id = project.id
+
+    member_id = kwargs.get("member_id")
+    if member_id is None:
+        user = create_user(db)
+        user_id = user.id
+
+    project_member = models.ProjectMember(
+        project_id=project_id,
+        member_id=member_id,
+    )
+    db.add(project_member)
+    db.commit()
+    return project_member
