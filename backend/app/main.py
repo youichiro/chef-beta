@@ -28,6 +28,16 @@ api_router = APIRouter(prefix="/api")
 
 
 @api_router.get(
+    "/members",
+    status_code=200,
+    response_model=Page[schemas.Member],
+)
+def get_members(db: Session = Depends(get_db)):
+    query = select(models.User)
+    return paginate(db, query)
+
+
+@api_router.get(
     "/projects",
     status_code=200,
     response_model=Page[schemas.Project],
@@ -35,6 +45,19 @@ api_router = APIRouter(prefix="/api")
 def get_projects(db: Session = Depends(get_db)):
     query = select(models.Project)
     return paginate(db, query)
+
+
+@api_router.get(
+    "/projects/{project_id}",
+    status_code=200,
+    response_model=schemas.Project,
+)
+def get_project(project_id: int, db: Session = Depends(get_db)):
+    query = select(models.Project).where(models.Project.id == project_id)
+    project = db.scalars(query).one_or_none()
+    if project is None:
+        raise HTTPException(status_code=404, detail=f"Project not found. project_id: {project_id}")
+    return project
 
 
 @api_router.get(
@@ -47,18 +70,7 @@ def get_datasets(project_id: int, db: Session = Depends(get_db)):
     project = db.scalars(query).one_or_none()
     if project is None:
         raise HTTPException(status_code=404, detail=f"Project not found. project_id: {project_id}")
-
     query = select(models.Dataset).where(models.Dataset.project_id == project_id)
-    return paginate(db, query)
-
-
-@api_router.get(
-    "/members",
-    status_code=200,
-    response_model=Page[schemas.Member],
-)
-def get_members(db: Session = Depends(get_db)):
-    query = select(models.User)
     return paginate(db, query)
 
 
