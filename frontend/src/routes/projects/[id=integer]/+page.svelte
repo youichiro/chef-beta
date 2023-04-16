@@ -7,11 +7,22 @@
   import { goto } from '$app/navigation';
   import { DatasetListSchema, type DatasetList, type Tab } from "$lib/types/dataset-types";
   import Pagination from "$lib/components/common/Pagination.svelte";
+  import { ProjectSchema, type Project } from "$lib/types/project-types";
 
   export let data: PageData;
   let datasetList: DatasetList;
+  let project: Project;
 
-  const getDatasets = async () => {
+  const getProject = async () => {
+    const response = await self.fetch(`http://localhost:8000/api/projects/${data.id}`);
+    if (response.ok) {
+      return response.json();
+    } else {
+      throw new Error(`status: ${response.status}, ${response.statusText}`);
+    }
+  };
+
+  const getDatasetList = async () => {
     const response = await self.fetch(`http://localhost:8000/api/projects/${data.id}/datasets?page=${data.page}&size=3`);
     if (response.ok) {
       return response.json();
@@ -20,7 +31,11 @@
     }
   };
 
-  let promise = getDatasets().then(response => {
+  let promise1 = getProject().then(response => {
+    project = ProjectSchema.parse(response);
+  });
+
+  let promise2 = getDatasetList().then(response => {
     datasetList = DatasetListSchema.parse(response);
   });
 
@@ -34,10 +49,16 @@
   }
 </script>
 
-<PageTop title="Project Detail" pages={[{name: 'projects', url: '/projects'}]} />
+{#await promise1}
+  <div class="text-center mt-8">
+    <Spinner />
+  </div>
+{:then}
+  <PageTop title={project.name} pages={[{name: 'projects', url: '/projects'}]} />
+{/await}
 
 <div>
-  {#await promise}
+  {#await promise2}
     <div class="text-center mt-8">
       <Spinner />
     </div>

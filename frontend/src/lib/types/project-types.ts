@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const Project = z.object({
+export const ProjectSchema = z.object({
   id: z.number(),
   name: z.string(),
   project_type: z.object({
@@ -9,10 +9,10 @@ export const Project = z.object({
   }),
 })
 
-export type Project = z.infer<typeof Project>;
+export type Project = z.infer<typeof ProjectSchema>;
 
 export const ProjectListSchema = z.object({
-  items: Project.array(),
+  items: ProjectSchema.array(),
   total: z.number(),
   page: z.number(),
   size: z.number(),
