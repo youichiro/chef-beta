@@ -2,7 +2,6 @@
   import { PaginationItem, ChevronLeft, ChevronRight } from "flowbite-svelte";
   import { ChevronDoubleLeft, ChevronDoubleRight } from "svelte-heros-v2";
 
-  export let baseUrl: string;
   export let currentPage: number;
   export let lastPage: number;
 
@@ -10,21 +9,29 @@
   const previousPage = currentPage - 1 >= 1 ? currentPage - 1 : null;
   const nextPage = currentPage + 1 <= lastPage ? currentPage + 1 : null;
 
-  const handleClickFirst = () => {
-    window.location.href = `${baseUrl}?page=${firstPage}`;
+  const handleClickFirst = async () => {
+    const queryParams = new URLSearchParams(location.search);
+    queryParams.set('page', firstPage.toString());
+    window.location.href = `?${queryParams.toString()}`;
   };
-  const handleClickPrevious = () => {
+  const handleClickPrevious = async () => {
     if (previousPage !== null) {
-      window.location.href = `${baseUrl}?page=${previousPage}`;
+      const queryParams = new URLSearchParams(location.search);
+      queryParams.set('page', previousPage.toString());
+      window.location.href = `?${queryParams.toString()}`;
     }
   };
-  const handleClickNext = () => {
+  const handleClickNext = async () => {
     if (nextPage !== null) {
-      window.location.href = `${baseUrl}?page=${nextPage}`;
+      const queryParams = new URLSearchParams(location.search);
+      queryParams.set('page', nextPage.toString());
+      window.location.href = `?${queryParams.toString()}`;
     }
   };
-  const handleClickLast = () => {
-    window.location.href = `${baseUrl}?page=${lastPage}`;
+  const handleClickLast = async () => {
+    const queryParams = new URLSearchParams(location.search);
+    queryParams.set('page', lastPage.toString());
+    window.location.href = `?${queryParams.toString()}`;
   };
 
   const styles = {

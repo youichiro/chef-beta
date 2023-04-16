@@ -16,7 +16,7 @@
       {#each projects as project (project.id)}
         <TableBodyRow>
           <TableBodyCell>{project.id}</TableBodyCell>
-          <TableBodyCell><A href={`/projects/${project.id}`}>{project.name}</A></TableBodyCell>
+          <TableBodyCell><A href={`/projects/${project.id}?tab=datasets`}>{project.name}</A></TableBodyCell>
           <TableBodyCell>{project.project_type.name}</TableBodyCell>
         </TableBodyRow>
       {/each}

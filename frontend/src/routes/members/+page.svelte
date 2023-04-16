@@ -32,7 +32,7 @@
       <p>items empty.</p>
     {:else}
       <MemberTable members={MemberListResponse.parse(response).items} />
-      <Pagination baseUrl="/members" currentPage={data.page} lastPage={MemberListResponse.parse(response).pages} />
+      <Pagination currentPage={data.page} lastPage={MemberListResponse.parse(response).pages} />
     {/if}
   {:catch error}
     <p>error! {error}</p>

@@ -6,12 +6,13 @@
   import DatasetTable from "$lib/components/datasets/DatasetTable.svelte";
   import { goto } from '$app/navigation';
   import { DatasetListSchema, type DatasetList, type Tab } from "$lib/types/dataset-types";
+  import Pagination from "$lib/components/common/Pagination.svelte";
 
   export let data: PageData;
-  let datasets: DatasetList;
+  let datasetList: DatasetList;
 
   const getDatasets = async () => {
-    const response = await self.fetch(`http://localhost:8000/api/projects/${data.id}/datasets`);
+    const response = await self.fetch(`http://localhost:8000/api/projects/${data.id}/datasets?page=${data.page}&size=3`);
     if (response.ok) {
       return response.json();
     } else {
@@ -20,7 +21,7 @@
   };
 
   let promise = getDatasets().then(response => {
-    datasets = DatasetListSchema.parse(response);
+    datasetList = DatasetListSchema.parse(response);
   });
 
   const handleClickTab = async (tab: Tab) => {
@@ -42,8 +43,9 @@
     </div>
   {:then}
     <Tabs style="underline" defaultClass="flex flex-wrap space-x-2 bg-slate-50 pl-4" contentClass="">
-      <TabItem open={data.tab === "datasets" || data.tab === null} title="Datasets" on:click={() => handleClickTab("datasets")}>
-        <DatasetTable datasets={datasets.items} />
+      <TabItem open={data.tab === "datasets"} title="Datasets" on:click={() => handleClickTab("datasets")}>
+        <DatasetTable datasets={datasetList.items} />
+        <Pagination currentPage={data.page} lastPage={datasetList.pages} />
       </TabItem>
       <TabItem open={data.tab === "guideline"} title="Guideline" on:click={() => handleClickTab("guideline")}>
         <p>guideline</p>
