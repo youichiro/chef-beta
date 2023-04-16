@@ -31,13 +31,14 @@
     }
   };
 
-  let promise1 = getProject().then(response => {
-    project = ProjectSchema.parse(response);
-  });
-
-  let promise2 = getDatasetList().then(response => {
-    datasetList = DatasetListSchema.parse(response);
-  });
+  let promise = Promise.all([
+    getProject().then(response => {
+      project = ProjectSchema.parse(response);
+    }),
+    getDatasetList().then(response => {
+      datasetList = DatasetListSchema.parse(response);
+    })
+  ]);
 
   const handleClickTab = async (tab: Tab) => {
     if (tab === null) {
@@ -49,20 +50,13 @@
   }
 </script>
 
-{#await promise1}
-  <div class="text-center mt-8">
-    <Spinner />
-  </div>
-{:then}
-  <PageTop title={project.name} pages={[{name: 'projects', url: '/projects'}]} />
-{/await}
-
 <div>
-  {#await promise2}
+  {#await promise}
     <div class="text-center mt-8">
       <Spinner />
     </div>
   {:then}
+    <PageTop title={project.name} pages={[{name: 'projects', url: '/projects'}]} />
     <Tabs style="underline" defaultClass="flex flex-wrap space-x-2 bg-slate-50 pl-4" contentClass="">
       <TabItem open={data.tab === "datasets"} title="Datasets" on:click={() => handleClickTab("datasets")}>
         <DatasetTable datasets={datasetList.items} />
