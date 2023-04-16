@@ -8,11 +8,14 @@
   import { DatasetListSchema, type DatasetList, type Tab } from "$lib/types/dataset-types";
   import Pagination from "$lib/components/common/Pagination.svelte";
   import { ProjectSchema, type Project, Guideline, GuidelineSchema } from "$lib/types/project-types";
+  import { ProjectMemberListSchema, type ProjectMemberList } from "$lib/types/member-types";
+    import MemberTable from "$lib/components/members/MemberTable.svelte";
 
   export let data: PageData;
   let datasetList: DatasetList;
   let project: Project;
   let guideline: Guideline | null = null;
+  let projectMemberList: ProjectMemberList;
 
   const getProject = async (): Promise<Project> => {
     const response = await self.fetch(`http://localhost:8000/api/projects/${data.id}`);
@@ -41,6 +44,15 @@
     }
   }
 
+  const getProjectMembers = async (): Promise<ProjectMemberList> => {
+    const response = await self.fetch(`http://localhost:8000/api/projects/${data.id}/members`)
+    if (response.ok) {
+      return response.json()
+    } else {
+      throw new Error(`status: ${response.status}, ${response.statusText}`);
+    }
+  }
+
   let promise = Promise.all([
     getProject().then(response => {
       project = ProjectSchema.parse(response);
@@ -52,6 +64,9 @@
       if (response !== null) {
         guideline = GuidelineSchema.parse(response);
       }
+    }),
+    getProjectMembers().then(response => {
+      projectMemberList = ProjectMemberListSchema.parse(response);
     })
   ]);
 
@@ -93,7 +108,7 @@
         </div>
       </TabItem>
       <TabItem open={data.tab === "members"} title="Members" on:click={() => handleClickTab("members")}>
-        <p>members</p>
+        <MemberTable members={projectMemberList.items.map(projectMember => projectMember.member)} />
       </TabItem>
     </Tabs>
   {:catch error}
