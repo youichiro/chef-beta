@@ -6,21 +6,25 @@
   import type { SvelteComponent } from "svelte";
 
   $: activeUrl = $page.url.pathname;
+  $: items = getItems(activeUrl);
   let activateClickOutside = false;
 
   type Item = {
     label: string;
     url: string,
     icon: typeof SvelteComponent;
+    active?: boolean;
   }
 
-  const items: Item[] = [
-    { label: "Home", url: "/", icon: Home },
-    { label: "Projects", url: "/projects", icon: Folder },
-    { label: "Members", url: "/members", icon: Users },
-    { label: "Dashboard", url: "/", icon: ChartBar },
-    { label: "Setting", url: "/", icon: Cog },
-  ]
+  const getItems = (activeUrl: string): Item[] => {
+    return [
+      { label: "Home", url: "/", icon: Home, active: activeUrl === "/" },
+      { label: "Projects", url: "/projects", icon: Folder, active: activeUrl?.startsWith("/projects") },
+      { label: "Members", url: "/members", icon: Users, active: activeUrl === "/members" },
+      { label: "Dashboard", url: "/", icon: ChartBar, active: activeUrl === "/dashboard" },
+      { label: "Setting", url: "/", icon: Cog, active: activeUrl === "/setting" },
+    ]
+  }
 
   const styles = {
     sidebarItem: {
@@ -47,7 +51,7 @@
           <SidebarItem
             label={item.label}
             href={item.url}
-            active={activeUrl === item.url}
+            active={item.active}
             aClass={styles.sidebarItem.base}
             activeClass={styles.sidebarItem.active}
           >
