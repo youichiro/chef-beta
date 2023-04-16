@@ -25,28 +25,35 @@ class Guideline(BaseModel):
         orm_mode = True
 
 
-class Dataset(BaseModel):
-    id: int = Field(example=1)
-    name: str = Field(example="sample dataset")
-
-    class Config:
-        orm_mode = True
-
-
-class ProjectDetail(BaseModel):
-    id: int = Field(example=1)
-    name: str = Field(example="sample project")
-    project_type: ProjectType
-    guideline: Guideline | None
-    datasets: list[Dataset]
-
-    class Config:
-        orm_mode = True
-
-
 class Member(BaseModel):
     id: int = Field(example=1)
     name: str = Field(example="user name")
+
+    class Config:
+        orm_mode = True
+
+
+class Label(BaseModel):
+    id: int = Field(example=1)
+    name: str = Field(example="sample label")
+    order: int | None = Field(example=1)
+    color: str | None = Field(example="green")
+
+    class Config:
+        orm_mode = True
+
+
+class Document(BaseModel):
+    id: int = Field(example=1)
+    content: str = Field(example="My name is youichiro ogawa.")
+
+    class Config:
+        orm_mode = True
+
+
+class Dataset(BaseModel):
+    id: int = Field(example=1)
+    name: str = Field(example="sample dataset")
 
     class Config:
         orm_mode = True

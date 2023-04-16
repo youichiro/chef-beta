@@ -38,20 +38,18 @@ def get_projects(db: Session = Depends(get_db)):
 
 
 @api_router.get(
-    "/projects/{project_id}",
+    "/projects/{project_id}/datasets",
     status_code=200,
-    response_model=schemas.ProjectDetail,
-    responses={
-        404: {"description": "Project not found"},
-    },
+    response_model=Page[schemas.Dataset],
 )
-def get_project_detail(project_id: int, db: Session = Depends(get_db)):
+def get_datasets(project_id: int, db: Session = Depends(get_db)):
     query = select(models.Project).where(models.Project.id == project_id)
     project = db.scalars(query).one_or_none()
     if project is None:
         raise HTTPException(status_code=404, detail=f"Project not found. project_id: {project_id}")
 
-    return project
+    query = select(models.Dataset).where(models.Dataset.project_id == project_id)
+    return paginate(db, query)
 
 
 @api_router.get(
