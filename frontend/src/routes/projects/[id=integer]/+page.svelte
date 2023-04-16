@@ -6,7 +6,6 @@
   import type { ProjectDetail } from "$lib/types/project-types";
   import { Tabs, TabItem } from 'flowbite-svelte';
   import DatasetTable from "$lib/components/datasets/DatasetTable.svelte";
-  import Pagination from "$lib/components/common/Pagination.svelte";
   import { goto } from '$app/navigation';
   import type { Tab } from "$lib/types/dataset-types";
 
