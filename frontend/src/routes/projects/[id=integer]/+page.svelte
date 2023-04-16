@@ -9,7 +9,8 @@
   import Pagination from "$lib/components/common/Pagination.svelte";
   import { ProjectSchema, type Project, Guideline, GuidelineSchema } from "$lib/types/project-types";
   import { ProjectMemberListSchema, type ProjectMemberList } from "$lib/types/member-types";
-    import MemberTable from "$lib/components/members/MemberTable.svelte";
+  import MemberTable from "$lib/components/members/MemberTable.svelte";
+  import ProjectDetailTable from "$lib/components/projects/ProjectDetailTable.svelte";
 
   export let data: PageData;
   let datasetList: DatasetList;
@@ -81,7 +82,7 @@
 </script>
 
 <style lang="postcss">
-  .guideline {
+  .tab-content {
     @apply m-8;
   }
 </style>
@@ -99,7 +100,7 @@
         <Pagination currentPage={data.page} lastPage={datasetList.pages} />
       </TabItem>
       <TabItem open={data.tab === "guideline"} title="Guideline" on:click={() => handleClickTab("guideline")}>
-        <div class="guideline">
+        <div class="tab-content">
           {#if guideline !== null}
             <p>{guideline.content}</p>
           {:else}
@@ -109,6 +110,9 @@
       </TabItem>
       <TabItem open={data.tab === "members"} title="Members" on:click={() => handleClickTab("members")}>
         <MemberTable members={projectMemberList.items.map(projectMember => projectMember.member)} />
+      </TabItem>
+      <TabItem open={data.tab === "detail"} title="Project Detail" on:click={() => handleClickTab("detail")}>
+        <ProjectDetailTable project={project} />
       </TabItem>
     </Tabs>
   {:catch error}
