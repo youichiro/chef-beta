@@ -56,6 +56,16 @@ def test_get_project(client, db):
     assert item.project_type.id == project.project_type.id
 
 
+def test_get_guideline(client, db):
+    guideline = factories.create_guideline(db)
+
+    response = client.get(f"/api/projects/{guideline.project.id}/guideline")
+    assert response.status_code == 200
+
+    item = schemas.Guideline.parse_obj(response.json())
+    assert item.id == guideline.id
+
+
 def test_get_dataset(client, db):
     project = factories.create_project(db)
     dataset1 = factories.create_dataset(db, project_id=project.id, name="dummy dataset1")

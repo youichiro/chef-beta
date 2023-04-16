@@ -61,6 +61,19 @@ def get_project(project_id: int, db: Session = Depends(get_db)):
 
 
 @api_router.get(
+    "/projects/{project_id}/guideline",
+    status_code=200,
+    response_model=schemas.Guideline,
+)
+def get_guideline(project_id: int, db: Session = Depends(get_db)):
+    query = select(models.Project).where(models.Project.id == project_id)
+    project = db.scalars(query).one_or_none()
+    if project is None:
+        raise HTTPException(status_code=404, detail=f"Project not found. project_id: {project_id}")
+    return project.guideline
+
+
+@api_router.get(
     "/projects/{project_id}/datasets",
     status_code=200,
     response_model=Page[schemas.Dataset],

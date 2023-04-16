@@ -49,3 +49,18 @@ def create_dataset(db: Session, **kwargs):
     db.add(dataset)
     db.commit()
     return dataset
+
+
+def create_guideline(db: Session, **kwargs):
+    project_id = kwargs.get("project_id")
+    if project_id is None:
+        project = create_project(db, project_type_id=kwargs.get("project_type_id"))
+        project_id = project.id
+
+    guideline = models.Guideline(
+        project_id=project_id,
+        content=kwargs.get("content", "dummy guideline content"),
+    )
+    db.add(guideline)
+    db.commit()
+    return guideline
