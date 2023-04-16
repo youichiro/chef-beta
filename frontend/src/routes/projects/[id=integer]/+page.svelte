@@ -12,9 +12,9 @@
   export let data: PageData;
   let datasetList: DatasetList;
   let project: Project;
-  let guideline: Guideline;
+  let guideline: Guideline | null = null;
 
-  const getProject = async () => {
+  const getProject = async (): Promise<Project> => {
     const response = await self.fetch(`http://localhost:8000/api/projects/${data.id}`);
     if (response.ok) {
       return response.json();
@@ -23,7 +23,7 @@
     }
   };
 
-  const getDatasetList = async () => {
+  const getDatasetList = async (): Promise<DatasetList> => {
     const response = await self.fetch(`http://localhost:8000/api/projects/${data.id}/datasets?page=${data.page}&size=3`);
     if (response.ok) {
       return response.json();
@@ -32,7 +32,7 @@
     }
   };
 
-  const getGuideline = async () => {
+  const getGuideline = async (): Promise<Guideline | null> => {
     const response = await self.fetch(`http://localhost:8000/api/projects/${data.id}/guideline`)
     if (response.ok) {
       return response.json()
@@ -49,7 +49,9 @@
       datasetList = DatasetListSchema.parse(response);
     }),
     getGuideline().then(response => {
-      guideline = GuidelineSchema.parse(response);
+      if (response !== null) {
+        guideline = GuidelineSchema.parse(response);
+      }
     })
   ]);
 
@@ -62,6 +64,12 @@
     await goto(`?${queryParams.toString()}`);
   }
 </script>
+
+<style lang="postcss">
+  .guideline {
+    @apply m-8;
+  }
+</style>
 
 <div>
   {#await promise}
@@ -76,7 +84,13 @@
         <Pagination currentPage={data.page} lastPage={datasetList.pages} />
       </TabItem>
       <TabItem open={data.tab === "guideline"} title="Guideline" on:click={() => handleClickTab("guideline")}>
-        <div>{guideline.content}</div>
+        <div class="guideline">
+          {#if guideline !== null}
+            <p>{guideline.content}</p>
+          {:else}
+            <p>😃</p>
+          {/if}
+        </div>
       </TabItem>
       <TabItem open={data.tab === "members"} title="Members" on:click={() => handleClickTab("members")}>
         <p>members</p>

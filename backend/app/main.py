@@ -63,7 +63,7 @@ def get_project(project_id: int, db: Session = Depends(get_db)):
 @api_router.get(
     "/projects/{project_id}/guideline",
     status_code=200,
-    response_model=schemas.Guideline,
+    response_model=schemas.Guideline | None,
 )
 def get_guideline(project_id: int, db: Session = Depends(get_db)):
     query = select(models.Project).where(models.Project.id == project_id)
