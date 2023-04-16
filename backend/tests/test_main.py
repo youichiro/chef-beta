@@ -1,16 +1,13 @@
 from fastapi_pagination import Page
 
 from app import schemas, models
+from tests import factories
 
 
 def test_get_projects(client, db):
-    project_type = models.ProjectType(name="classification")
-    db.add(project_type)
-    db.flush()
-    project1 = models.Project(project_type_id=project_type.id, name="demo project1")
-    project2 = models.Project(project_type_id=project_type.id, name="demo project2")
-    db.add_all([project1, project2])
-    db.commit()
+    project_type = factories.create_project_type(db)
+    project1 = factories.create_project(db, project_type_id=project_type.id, name="dummy project1")
+    project2 = factories.create_project(db, project_type_id=project_type.id, name="dummy project2")
 
     response = client.get("/api/projects")
     assert response.status_code == 200
@@ -30,10 +27,8 @@ def test_get_projects(client, db):
 
 
 def test_get_members(client, db):
-    user1 = models.User(name="user1")
-    user2 = models.User(name="user2")
-    db.add_all([user1, user2])
-    db.commit()
+    user1 = factories.create_user(db, name="dummy user1")
+    user2 = factories.create_user(db, name="dummy user2")
 
     response = client.get("/api/members")
     assert response.status_code == 200
@@ -51,16 +46,9 @@ def test_get_members(client, db):
 
 
 def test_get_dataset(client, db):
-    project_type = models.ProjectType(name="classification")
-    db.add(project_type)
-    db.flush()
-    project = models.Project(project_type_id=project_type.id, name="demo project")
-    db.add(project)
-    db.flush()
-    dataset1 = models.Dataset(project_id=project.id, name="dataset1")
-    dataset2 = models.Dataset(project_id=project.id, name="dataset2")
-    db.add_all([dataset1, dataset2])
-    db.commit()
+    project = factories.create_project(db)
+    dataset1 = factories.create_dataset(db, project_id=project.id, name="dummy dataset1")
+    dataset2 = factories.create_dataset(db, project_id=project.id, name="dummy dataset2")
 
     project_id = project.id
     response = client.get(f"/api/projects/{project_id}/datasets")
