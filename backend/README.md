@@ -1,5 +1,10 @@
 # chef-api
 ## Setup
+create synbolic link .env
+```sh
+ln -s .env.docker .env # or .env.local
+```
+
 load environment variables
 ```sh
 brew install direnv

@@ -2,7 +2,7 @@ import { TabSchema } from "$lib/types/dataset-types";
 import type { PageLoad } from "./$types";
 
 export const load = (({ params, url }) => {
-  let tab = url.searchParams.get("tab");
+  const tab = url.searchParams.get("tab");
   const page = Number(url.searchParams.get("page") ?? "1");
 
   return {
